@@ -3,6 +3,8 @@ import { createRootRoute, Outlet, useRouterState } from '@tanstack/react-router'
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { MobileBottomNav } from '@/components/layout/MobileBottomNav';
+import { LoginModal } from '@/components/auth/LoginModal';
+import { useLoginModal } from '@/hooks/useAuthModal';
 import { useCart } from '@/hooks/useCart';
 import { socketClient } from '@/lib/socket-client';
 
@@ -13,6 +15,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   const { data: cart } = useCart();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { isOpen, close, redirectUrl } = useLoginModal();
 
   useEffect(() => {
     socketClient.connect();
@@ -31,6 +34,9 @@ function RootComponent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-ink text-foreground font-mono selection:bg-primary/25 selection:text-foreground">
+      {/* Modal Global de Login (sobrepõe qualquer tela sem sair da rota) */}
+      <LoginModal isOpen={isOpen} onClose={close} redirectUrl={redirectUrl} />
+
       {/* Região acessível para anúncios em tempo real e mutations */}
       <div
         id="a11y-announcements"

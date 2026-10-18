@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { useAuth } from '@/hooks/useAuth';
+import { openLoginModal } from '@/hooks/useAuthModal';
 import {
   KurioLogo,
   SearchIcon,
@@ -45,58 +46,59 @@ export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) 
     <header className="w-full bg-ink border-b border-border sticky top-0 z-40">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[120px] h-[72px] flex items-center justify-between relative">
         {/* Marca KURIO (Figma Node I70522:3240;70504:3015;70486:509) */}
-        <div className="flex items-center gap-[40px] lg:gap-[60px]">
-          <Link
-            to="/"
-            className="flex items-center focus-visible:ring-2 focus-visible:ring-primary rounded p-1"
-            aria-label="Página inicial Kurio"
-          >
-            <KurioLogo className="h-[20px] w-auto" />
-          </Link>
+        <Link
+          to="/"
+          className="flex items-center focus-visible:ring-2 focus-visible:ring-primary rounded p-1 shrink-0"
+          aria-label="Página inicial Kurio"
+        >
+          <KurioLogo className="h-[20px] w-auto" />
+        </Link>
 
-          {/* Navegação Desktop (Figma Node I70522:3240;70504:3015;70486:511) */}
-          <nav className="hidden md:flex items-center gap-[40px]" aria-label="Navegação principal">
-            {/* Início com Active Underline */}
-            <div className="flex flex-col items-center relative py-1">
-              <Link
-                to="/"
-                className={`font-mono text-[16px] leading-normal transition-colors ${
-                  activeItem === 'home'
-                    ? 'font-bold text-text-accent'
-                    : 'font-normal text-foreground hover:text-text-accent'
-                }`}
-              >
-                Início
-              </Link>
-              {activeItem === 'home' && (
-                <div className="absolute -bottom-2 w-[58px] h-[2px] bg-text-accent rounded-full" />
-              )}
-            </div>
-
+        {/* Navegação Desktop Centralizada (Figma Node I70522:3240;70504:3015;70486:511) */}
+        <nav
+          className="hidden md:flex items-center gap-[40px] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+          aria-label="Navegação principal"
+        >
+          {/* Início com Active Underline */}
+          <div className="flex flex-col items-center relative py-1">
             <Link
               to="/"
-              search={{ tab: 'all' }}
               className={`font-mono text-[16px] leading-normal transition-colors ${
-                activeItem === 'market'
+                activeItem === 'home'
                   ? 'font-bold text-text-accent'
                   : 'font-normal text-foreground hover:text-text-accent'
               }`}
             >
-              Mercado
+              Início
             </Link>
+            {activeItem === 'home' && (
+              <div className="absolute -bottom-2 w-[58px] h-[2px] bg-text-accent rounded-full" />
+            )}
+          </div>
 
-            <span className="font-mono text-[16px] leading-normal text-foreground/70 cursor-not-allowed select-none">
-              Criadores
-            </span>
+          <Link
+            to="/"
+            search={{ tab: 'all' }}
+            className={`font-mono text-[16px] leading-normal transition-colors ${
+              activeItem === 'market'
+                ? 'font-bold text-text-accent'
+                : 'font-normal text-foreground hover:text-text-accent'
+            }`}
+          >
+            Mercado
+          </Link>
 
-            <span className="font-mono text-[16px] leading-normal text-foreground/70 cursor-not-allowed select-none">
-              Aprenda
-            </span>
-          </nav>
-        </div>
+          <span className="font-mono text-[16px] leading-normal text-foreground/70 cursor-not-allowed select-none">
+            Criadores
+          </span>
+
+          <span className="font-mono text-[16px] leading-normal text-foreground/70 cursor-not-allowed select-none">
+            Aprenda
+          </span>
+        </nav>
 
         {/* Busca Expansível & Ações à Direita (Figma Node I70522:3240;70504:3015;70486:518) */}
-        <div className="flex items-center gap-[28px]">
+        <div className="flex items-center gap-3 sm:gap-4 lg:gap-5">
           {/* Lupa / Busca Interativa */}
           <div className="relative flex items-center">
             {searchOpen ? (
@@ -157,23 +159,21 @@ export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) 
             <div className="flex items-center gap-2">
               <Link
                 to="/profile"
-                className="flex items-center gap-2 px-2.5 py-1 rounded-[6px] bg-surface-card border border-border hover:border-primary transition-colors font-mono text-[14px] text-foreground"
+                className="size-[35px] rounded-[6px] bg-surface-card border border-border hover:border-primary transition-colors flex items-center justify-center overflow-hidden shrink-0"
                 aria-label="Ir para perfil do colecionador"
+                title={user.name || user.username || 'Perfil'}
               >
                 {user.avatarUrl ? (
                   <img
                     src={user.avatarUrl}
                     alt={user.name || user.username}
-                    className="size-6 rounded-full object-cover border border-primary/40"
+                    className="size-full object-cover"
                   />
                 ) : (
-                  <div className="size-6 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">
+                  <div className="size-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">
                     {(user.name || user.username || 'U').charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="hidden sm:inline font-bold truncate max-w-[110px]">
-                  {user.name || user.username}
-                </span>
               </Link>
 
               <Link
@@ -208,13 +208,17 @@ export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) 
               </Button>
             </div>
           ) : (
-            <Link
-              to="/login"
-              className="w-[100px] h-[35px] bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-medium text-[16px] rounded-[6px] flex items-center justify-center gap-[4px] transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-foreground"
+            <a
+              href="/login"
+              onClick={(e) => {
+                e.preventDefault();
+                openLoginModal();
+              }}
+              className="w-[100px] h-[35px] bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-medium text-[16px] rounded-[6px] flex items-center justify-center gap-[4px] transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer"
             >
               <LogoutIcon className="size-[20px]" />
               <span>Entrar</span>
-            </Link>
+            </a>
           )}
         </div>
       </div>

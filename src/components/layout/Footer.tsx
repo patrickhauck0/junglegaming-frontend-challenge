@@ -77,13 +77,13 @@ export function Footer() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="digite seu e-mail..."
-                    className="flex-1 bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-secondary focus-visible:outline-none"
+                    className="flex-1 min-w-0 bg-transparent px-3 py-2 text-sm text-foreground placeholder:text-secondary focus-visible:outline-none"
                     aria-label="E-mail para assinar a newsletter"
                     required
                   />
                   <button
                     type="submit"
-                    className="bg-primary hover:bg-primary-hover text-ink font-bold text-sm px-4 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-foreground"
+                    className="shrink-0 whitespace-nowrap bg-primary hover:bg-primary-hover text-ink font-bold text-sm px-4 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer"
                   >
                     Enviar
                   </button>

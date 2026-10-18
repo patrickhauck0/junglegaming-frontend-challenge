@@ -369,7 +369,6 @@ function PaymentPage() {
                         className="border border-border h-10 rounded-[3px] bg-transparent px-2 pr-6 text-[15px] text-foreground focus:border-primary outline-none transition-colors w-full appearance-none cursor-pointer"
                       >
                         <option value=".eth" className="bg-[#241612] text-foreground">.eth</option>
-                        <option value=".sol" className="bg-[#241612] text-foreground">.sol</option>
                       </select>
                       <ArrowDownIcon className="size-3 text-secondary absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
