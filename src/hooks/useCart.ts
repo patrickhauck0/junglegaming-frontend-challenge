@@ -27,3 +27,33 @@ export function useAddToCart() {
     },
   });
 }
+
+export function useUpdateCartItem() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ nftId, quantity }: { nftId: string; quantity: number }) => {
+      const res = await apiClient.patch<Cart>(`/api/cart/items/${nftId}`, { quantity });
+      return res.data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['cart'], data);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
+}
+
+export function useRemoveCartItem() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (nftId: string) => {
+      const res = await apiClient.delete<Cart>(`/api/cart/items/${nftId}`);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['cart'], data);
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+    },
+  });
+}

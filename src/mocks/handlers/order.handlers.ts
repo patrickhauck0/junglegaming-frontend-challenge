@@ -6,9 +6,12 @@ import type { Order, OrderItemSnapshot } from '@/contracts/order';
 
 function extractUserId(request: Request): string | null {
   const auth = request.headers.get('Authorization');
-  if (!auth) return null;
-  const match = auth.match(/token_(user_[^_\s]+)/);
-  return match ? match[1] ?? null : null;
+  if (auth) {
+    const match = auth.match(/token_(user_[^_\s]+)/);
+    if (match?.[1]) return match[1];
+  }
+  const guestHeader = request.headers.get('X-Guest-Id');
+  return guestHeader || 'user_1';
 }
 
 export const orderHandlers = [

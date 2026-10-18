@@ -419,3 +419,75 @@ export function ShareMailIcon({ className = 'size-4', ...props }: IconProps) {
     </svg>
   );
 }
+
+export function TrashIcon({ className = 'size-6', ...props }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 18 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      <path
+        d="M15.4245 7.59C15.4245 15.609 16.5788 19.2338 8.81495 19.2338C1.05019 19.2338 2.22829 15.609 2.22829 7.59"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M16.9005 4.51571H0.75"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.2502 4.51571C12.2502 4.51571 12.7788 0.75 8.82448 0.75C4.87114 0.75 5.39971 4.51571 5.39971 4.51571"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function WalletIcon({ className = 'size-5', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 21 19" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M19.207 11.7114H15.3204C13.9051 11.7114 12.7575 10.5638 12.7575 9.14762C12.7575 7.73238 13.9051 6.58476 15.3204 6.58476H19.1766" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M15.7579 9.08905H15.4608" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5.6421 5.17962H9.7021" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M0.75 9.28905C0.75 2.88429 3.07476 0.75 10.051 0.75C17.0262 0.75 19.351 2.88429 19.351 9.28905C19.351 15.6929 17.0262 17.8281 10.051 17.8281C3.07476 17.8281 0.75 15.6929 0.75 9.28905Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function MoreVerticalIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 3 15" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <circle cx="1.5" cy="1.5" r="1.5" fill="currentColor" />
+      <circle cx="1.5" cy="7.5" r="1.5" fill="currentColor" />
+      <circle cx="1.5" cy="13.5" r="1.5" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function RadioSelectedIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <circle cx="8" cy="8" r="7.4" stroke="#D28A4C" strokeWidth="1.2" />
+      <circle cx="8" cy="8" r="4.5" fill="#D28A4C" />
+    </svg>
+  );
+}
+
+export function RadioUnselectedIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <circle cx="8" cy="8" r="7.4" stroke="#D28A4C" strokeWidth="1.2" />
+    </svg>
+  );
+}

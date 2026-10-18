@@ -22,7 +22,10 @@ function RootComponent() {
   }, []);
 
   const isNftDetails = pathname.startsWith('/nfts/');
-  const activeHeaderItem = isNftDetails ? 'market' : 'home';
+  const isCart = pathname === '/cart';
+  const isPayment = pathname === '/payment';
+  const hideMobileNav = isNftDetails || isCart || isPayment;
+  const activeHeaderItem = isNftDetails || isCart || isPayment ? 'market' : 'home';
 
   return (
     <div className="min-h-screen flex flex-col bg-ink text-foreground font-mono selection:bg-primary/25 selection:text-foreground">
@@ -34,8 +37,8 @@ function RootComponent() {
         className="sr-only"
       />
 
-      {/* Header: visível sempre no desktop; no mobile escondido na tela de detalhes conforme Figma 15:5536 */}
-      <div className={isNftDetails ? 'hidden md:block' : 'block'}>
+      {/* Header: visível sempre no desktop; no mobile escondido na tela de detalhes e carrinho conforme Figma */}
+      <div className={hideMobileNav ? 'hidden md:block' : 'block'}>
         <Header cartItemCount={cart?.totalItems || 0} activeItem={activeHeaderItem} />
       </div>
 
@@ -43,13 +46,13 @@ function RootComponent() {
         <Outlet />
       </main>
 
-      {/* Footer: visível no desktop e mobile normal; escondido no mobile na tela de detalhes */}
-      <div className={isNftDetails ? 'hidden md:block' : 'block'}>
+      {/* Footer: visível no desktop e mobile normal; escondido no mobile na tela de detalhes e carrinho */}
+      <div className={hideMobileNav ? 'hidden md:block' : 'block'}>
         <Footer />
       </div>
 
-      {/* MobileBottomNav: escondido na tela de detalhes mobile (que possui a Buy Bar própria) */}
-      {!isNftDetails && <MobileBottomNav cartItemCount={cart?.totalItems || 0} />}
+      {/* MobileBottomNav: escondido quando a tela mobile possui barra própria */}
+      {!hideMobileNav && <MobileBottomNav cartItemCount={cart?.totalItems || 0} />}
     </div>
   );
 }
