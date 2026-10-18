@@ -51,6 +51,22 @@ test.describe('Visual Audit - Home and NFT Details', () => {
         path: path.join(outputDir, 'desktop-order-confirmation.png'),
         fullPage: true,
       });
+
+      // 6. Login Desktop
+      await page.goto('/login', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'desktop-login.png'),
+        fullPage: true,
+      });
+
+      // 7. Cadastro Desktop
+      await page.goto('/register', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'desktop-register.png'),
+        fullPage: true,
+      });
     }
 
     if (testInfo.project.name === 'Mobile Chromium') {
@@ -93,6 +109,22 @@ test.describe('Visual Audit - Home and NFT Details', () => {
       await page.waitForTimeout(1500);
       await page.screenshot({
         path: path.join(outputDir, 'mobile-order-confirmation.png'),
+        fullPage: true,
+      });
+
+      // 6. Login Mobile
+      await page.goto('/login', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'mobile-login.png'),
+        fullPage: true,
+      });
+
+      // 7. Cadastro Mobile
+      await page.goto('/register', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'mobile-register.png'),
         fullPage: true,
       });
     }

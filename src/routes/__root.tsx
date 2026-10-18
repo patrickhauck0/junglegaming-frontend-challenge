@@ -25,7 +25,8 @@ function RootComponent() {
   const isCart = pathname === '/cart';
   const isPayment = pathname === '/payment';
   const isOrders = pathname.startsWith('/orders');
-  const hideMobileNav = isNftDetails || isCart || isPayment || isOrders;
+  const isAuth = pathname === '/login' || pathname === '/register';
+  const hideMobileNav = isNftDetails || isCart || isPayment || isOrders || isAuth;
   const activeHeaderItem = isNftDetails || isCart || isPayment || isOrders ? 'market' : 'home';
 
   return (

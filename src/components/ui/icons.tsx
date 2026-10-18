@@ -516,3 +516,58 @@ export function CloseModalIcon({ className = 'size-4', ...props }: IconProps) {
   );
 }
 
+export function GoogleIcon({ className = 'size-5', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} {...props}>
+      <path
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+        fill="#4285F4"
+      />
+      <path
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+        fill="#34A853"
+      />
+      <path
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+        fill="#EA4335"
+      />
+    </svg>
+  );
+}
+
+export function FacebookIcon({ className = 'size-5', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path
+        d="M13.3309 3.32083H15.1567V0.140826C14.8417 0.0974924 13.7584 -7.62939e-06 12.4967 -7.62939e-06C6.72006 -7.62939e-06 8.29172 6.54166 8.06172 7.49999H5.15589V11.055H8.06089V20H11.6226V11.0558H14.4101L14.8526 7.50083H11.6217C11.7784 5.14749 10.9876 3.32083 13.3309 3.32083V3.32083Z"
+        fill="#3B5999"
+      />
+    </svg>
+  );
+}
+
+export function EyeHideIcon({ className = 'size-[18px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M4.21611 11.9833C2.11 10.7666 0.75 8.93326 0.75 7.32493C0.75 4.59159 4.66 1.24159 9.48611 1.24159C11.46 1.24159 13.2922 1.79993 14.7656 2.66659" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#B39463"/>
+      <path d="M16.8997 4.38359C17.7412 5.32526 18.2314 6.36693 18.2314 7.32526C18.2314 10.0586 14.3119 13.4086 9.48583 13.4086C8.62638 13.4086 7.78677 13.3003 7.00194 13.1086" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#B39463"/>
+      <path d="M7.37594 9.18093C6.81399 8.69009 6.49949 8.02093 6.50233 7.32343C6.49855 5.86926 7.83211 4.68759 9.48111 4.68509C10.2744 4.68343 11.0357 4.96093 11.5967 5.45593" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#B39463"/>
+      <path d="M12.4229 7.79101C12.2019 8.86768 11.247 9.71184 10.0268 9.90934" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#B39463"/>
+      <path d="M16.9394 0.750009L2.04172 13.895" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#B39463"/>
+    </svg>
+  );
+}
+
+export function EyeShowIcon({ className = 'size-[18px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 19 15" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M0.75 7.32493C0.75 4.59159 4.66 1.24159 9.48611 1.24159C14.3119 1.24159 18.2314 4.59159 18.2314 7.32493C18.2314 10.0586 14.3119 13.4086 9.48611 13.4086C4.66 13.4086 0.75 10.0586 0.75 7.32493Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" stroke="#B39463"/>
+      <circle cx="9.5" cy="7.325" r="2.6" strokeWidth="1.5" stroke="#B39463" />
+    </svg>
+  );
+}
+
