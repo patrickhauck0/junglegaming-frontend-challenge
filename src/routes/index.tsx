@@ -11,6 +11,8 @@ import {
   ArrowRightIcon,
   ArrowDownIcon,
 } from '@/components/ui/icons';
+import { Button, Input } from '@/components/ui';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const CatalogSearchParamsSchema = z.object({
   search: z.string().optional(),
@@ -104,27 +106,28 @@ function HomePage() {
         <div className="flex md:hidden items-center gap-3 mb-6 w-full">
           <form
             onSubmit={handleMobileSearchSubmit}
-            className="flex-1 bg-surface-card border border-border rounded-[10px] px-3.5 py-2.5 flex items-center gap-2.5"
+            className="flex-1 bg-surface-card border border-border rounded-[10px] px-3.5 py-1.5 flex items-center gap-2.5"
           >
             <SearchIcon className="size-5 text-secondary shrink-0" />
-            <input
+            <Input
               type="text"
               value={mobileSearchInput}
               onChange={(e) => setMobileSearchInput(e.target.value)}
               placeholder="Explorar coleções"
-              className="bg-transparent font-mono text-[14px] text-foreground placeholder:text-secondary focus-visible:outline-none w-full"
+              className="bg-transparent font-mono text-[14px] text-foreground placeholder:text-secondary focus-visible:outline-none focus-visible:ring-0 border-0 p-0 h-auto w-full shadow-none"
               aria-label="Explorar coleções e NFTs"
             />
           </form>
 
-          <button
+          <Button
             type="button"
+            size="icon"
             onClick={() => setMobileDrawerOpen(true)}
-            className="size-[45px] rounded-[10px] bg-primary flex items-center justify-center text-ink shrink-0 shadow-md focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer"
+            className="size-[45px] rounded-[10px] bg-primary flex items-center justify-center text-ink shrink-0 shadow-md focus-visible:ring-2 focus-visible:ring-foreground cursor-pointer hover:brightness-110 p-0"
             aria-label="Abrir filtros"
           >
             <FilterSlidersIcon className="size-5 text-ink" />
-          </button>
+          </Button>
         </div>
 
         {/* Hero Mobile (Figma Frame 14:5226 - 190px de altura) */}
@@ -285,58 +288,39 @@ function HomePage() {
             {/* Toolbar Superior: Abas e Ordenação (Figma Node 70351:239) */}
             <div className="flex items-center justify-between w-full relative pb-[12px] border-b border-border">
               {/* Abas */}
-              <div className="flex items-center gap-[16px] sm:gap-[20px] font-mono text-[14px] sm:text-[15px] font-medium leading-[16px]" role="tablist">
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={currentTab === 'all'}
-                  onClick={() => handleTabChange('all')}
-                  className={`relative py-1 cursor-pointer transition-colors ${
-                    currentTab === 'all'
-                      ? 'text-text-accent font-bold'
-                      : 'text-foreground hover:text-text-accent'
-                  }`}
-                >
-                  Todos os NFTs
-                  {currentTab === 'all' && (
-                    <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-primary z-10" />
-                  )}
-                </button>
+              <Tabs value={currentTab} onValueChange={(val) => handleTabChange(val as 'all' | 'new' | 'trending')}>
+                <TabsList className="bg-transparent p-0 h-auto gap-[16px] sm:gap-[20px] rounded-none">
+                  <TabsTrigger
+                    value="all"
+                    className="relative py-1 cursor-pointer transition-colors font-mono text-[14px] sm:text-[15px] font-medium leading-[16px] bg-transparent border-0 rounded-none shadow-none p-0 data-[state=active]:text-text-accent data-[state=active]:font-bold data-[state=inactive]:text-foreground data-[state=inactive]:hover:text-text-accent"
+                  >
+                    Todos os NFTs
+                    {currentTab === 'all' && (
+                      <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-primary z-10" />
+                    )}
+                  </TabsTrigger>
 
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={currentTab === 'new'}
-                  onClick={() => handleTabChange('new')}
-                  className={`relative py-1 cursor-pointer transition-colors ${
-                    currentTab === 'new'
-                      ? 'text-text-accent font-bold'
-                      : 'text-foreground hover:text-text-accent'
-                  }`}
-                >
-                  Novos lançamentos
-                  {currentTab === 'new' && (
-                    <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-primary z-10" />
-                  )}
-                </button>
+                  <TabsTrigger
+                    value="new"
+                    className="relative py-1 cursor-pointer transition-colors font-mono text-[14px] sm:text-[15px] font-medium leading-[16px] bg-transparent border-0 rounded-none shadow-none p-0 data-[state=active]:text-text-accent data-[state=active]:font-bold data-[state=inactive]:text-foreground data-[state=inactive]:hover:text-text-accent"
+                  >
+                    Novos lançamentos
+                    {currentTab === 'new' && (
+                      <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-primary z-10" />
+                    )}
+                  </TabsTrigger>
 
-                <button
-                  type="button"
-                  role="tab"
-                  aria-selected={currentTab === 'trending'}
-                  onClick={() => handleTabChange('trending')}
-                  className={`relative py-1 cursor-pointer transition-colors ${
-                    currentTab === 'trending'
-                      ? 'text-text-accent font-bold'
-                      : 'text-foreground hover:text-text-accent'
-                  }`}
-                >
-                  Em alta
-                  {currentTab === 'trending' && (
-                    <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-primary z-10" />
-                  )}
-                </button>
-              </div>
+                  <TabsTrigger
+                    value="trending"
+                    className="relative py-1 cursor-pointer transition-colors font-mono text-[14px] sm:text-[15px] font-medium leading-[16px] bg-transparent border-0 rounded-none shadow-none p-0 data-[state=active]:text-text-accent data-[state=active]:font-bold data-[state=inactive]:text-foreground data-[state=inactive]:hover:text-text-accent"
+                  >
+                    Em alta
+                    {currentTab === 'trending' && (
+                      <span className="absolute -bottom-[13px] left-0 right-0 h-[2px] bg-primary z-10" />
+                    )}
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
 
               {/* Ordenação Desktop (Figma Node 70351:241 - hidden no mobile conforme frame 14:5226) */}
               <div className="hidden md:flex items-center gap-[6px] font-mono text-[15px] font-normal text-foreground">
@@ -432,31 +416,35 @@ function HomePage() {
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
                 const isActive = pageNum === currentPage;
                 return (
-                  <button
+                  <Button
                     key={`page-${pageNum}`}
                     type="button"
+                    variant={isActive ? 'default' : 'outline'}
+                    size="icon"
                     onClick={() => handlePageChange(pageNum)}
-                    className={`size-[35px] rounded-[4px] flex items-center justify-center font-mono text-[18px] leading-[16px] transition-colors focus-visible:ring-2 focus-visible:ring-primary cursor-pointer ${
+                    className={`size-[35px] rounded-[4px] flex items-center justify-center font-mono text-[18px] leading-[16px] transition-colors focus-visible:ring-2 focus-visible:ring-primary cursor-pointer p-0 ${
                       isActive
-                        ? 'bg-primary text-ink font-bold'
-                        : 'border border-border bg-transparent text-foreground font-normal hover:border-primary/60'
+                        ? 'bg-primary text-ink font-bold hover:bg-primary/90'
+                        : 'border border-border bg-transparent text-foreground font-normal hover:border-primary/60 hover:bg-transparent'
                     }`}
                     aria-current={isActive ? 'page' : undefined}
                     aria-label={`Página ${pageNum}`}
                   >
                     {pageNum}
-                  </button>
+                  </Button>
                 );
               })}
 
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="icon"
                 onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                className="size-[35px] rounded-[4px] border border-border bg-transparent text-foreground flex items-center justify-center transition-colors hover:border-primary/60 focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                className="size-[35px] rounded-[4px] border border-border bg-transparent text-foreground flex items-center justify-center transition-colors hover:border-primary/60 hover:bg-transparent focus-visible:ring-2 focus-visible:ring-primary cursor-pointer p-0"
                 aria-label="Próxima página"
               >
                 <ArrowRightIcon className="size-4" />
-              </button>
+              </Button>
             </nav>
           </div>
         </div>

@@ -15,7 +15,7 @@ import {
   RadioUnselectedIcon,
   HeartIcon,
 } from '@/components/ui/icons';
-import { Button } from '@/components/ui';
+import { Button, Input, Label } from '@/components/ui';
 
 export const Route = createFileRoute('/wallets')({
   beforeLoad: ({ location }) => {
@@ -368,23 +368,23 @@ function WalletsPage() {
                 data-node-id="70390:244"
                 data-name="Main Wallet Name"
               >
-                <label className="flex items-center font-mono text-[15px] leading-[15px] text-[#F5F1EB]">
+                <Label className="flex items-center font-mono text-[15px] leading-[15px] text-[#F5F1EB]">
                   <span>Nome de exibição</span>
                   <span className="text-[22px] leading-[29px] text-[#F0805F] ml-1" data-node-id="9:1858">
                     *
                   </span>
-                </label>
+                </Label>
                 <div
                   className="h-[40px] w-full md:w-[417px] border border-[#3F2319] focus-within:border-[#D28A4C] rounded-[3px] px-[16px] bg-transparent flex items-center transition-colors"
                   data-node-id="9:1861"
                 >
-                  <input
+                  <Input
                     type="text"
                     required
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Nome de exibição"
-                    className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none"
+                    className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none border-0 p-0 h-auto focus-visible:ring-0 shadow-none"
                     aria-label="Nome de exibição"
                   />
                 </div>
@@ -396,23 +396,23 @@ function WalletsPage() {
                 data-node-id="70390:245"
                 data-name="Wallet Alias"
               >
-                <label className="flex items-center font-mono text-[15px] leading-[15px] text-[#F5F1EB]">
+                <Label className="flex items-center font-mono text-[15px] leading-[15px] text-[#F5F1EB]">
                   <span>Apelido da carteira</span>
                   <span className="text-[22px] leading-[29px] text-[#F0805F] ml-1" data-node-id="9:1859">
                     *
                   </span>
-                </label>
+                </Label>
                 <div
                   className="h-[40px] w-full md:w-[417px] border border-[#3F2319] focus-within:border-[#D28A4C] rounded-[3px] px-[16px] bg-transparent flex items-center transition-colors"
                   data-node-id="9:1862"
                 >
-                  <input
+                  <Input
                     type="text"
                     required
                     value={walletAlias}
                     onChange={(e) => setWalletAlias(e.target.value)}
                     placeholder="Apelido da carteira"
-                    className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none"
+                    className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none border-0 p-0 h-auto focus-visible:ring-0 shadow-none"
                     aria-label="Apelido da carteira"
                   />
                 </div>

@@ -16,7 +16,7 @@ import {
   EyeShowIcon,
   HeartIcon,
 } from '@/components/ui/icons';
-import { Button } from '@/components/ui';
+import { Button, Input, Label } from '@/components/ui';
 
 export const Route = createFileRoute('/profile')({
   beforeLoad: ({ location }) => {
@@ -396,23 +396,23 @@ function ProfilePage() {
                 data-node-id="70386:242"
                 data-name="Display Name Field"
               >
-                <label className="flex items-center font-mono text-[15px] leading-[15px] text-[#F5F1EB]">
+                <Label className="flex items-center font-mono text-[15px] leading-[15px] text-[#F5F1EB]">
                   <span>Nome de exibição</span>
                   <span className="text-[22px] leading-[29px] text-[#F0805F] ml-1" data-node-id="9:1516">
                     *
                   </span>
-                </label>
+                </Label>
                 <div
                   className="h-[40px] w-full md:w-[417px] border border-[#3F2319] focus-within:border-[#D28A4C] rounded-[3px] px-[16px] bg-transparent flex items-center transition-colors"
                   data-node-id="9:1509"
                 >
-                  <input
+                  <Input
                     type="text"
                     required
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="Nome de exibição"
-                    className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none"
+                    className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none border-0 p-0 h-auto focus-visible:ring-0 shadow-none"
                     aria-label="Nome de exibição"
                   />
                 </div>
@@ -424,23 +424,23 @@ function ProfilePage() {
                 data-node-id="70386:243"
                 data-name="Username Field"
               >
-                <label className="flex items-center font-mono text-[15px] leading-[15px] text-[#F5F1EB]">
+                <Label className="flex items-center font-mono text-[15px] leading-[15px] text-[#F5F1EB]">
                   <span>Nome de usuário</span>
                   <span className="text-[22px] leading-[29px] text-[#F0805F] ml-1" data-node-id="9:1517">
                     *
                   </span>
-                </label>
+                </Label>
                 <div
                   className="h-[40px] w-full md:w-[417px] border border-[#3F2319] focus-within:border-[#D28A4C] rounded-[3px] px-[16px] bg-transparent flex items-center transition-colors"
                   data-node-id="9:1511"
                 >
-                  <input
+                  <Input
                     type="text"
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Nome de usuário"
-                    className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none"
+                    className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none border-0 p-0 h-auto focus-visible:ring-0 shadow-none"
                     aria-label="Nome de usuário"
                   />
                 </div>

@@ -308,31 +308,33 @@ function CartPage() {
 
                       {/* Quantity Controls */}
                       <div className="w-[75px] flex items-center justify-center gap-3">
-                        <button
+                        <Button
                           type="button"
+                          size="icon"
                           onClick={() => handleUpdateQuantity(item.nftId, item.quantity, -1)}
                           disabled={updateMutation.isPending || removeMutation.isPending}
-                          className="h-[30px] w-5 bg-primary border border-ink rounded-[20px] flex items-center justify-center shadow-[0px_4px_6px_rgba(20,13,10,0.15)] hover:bg-[#E89B55] transition-colors cursor-pointer disabled:opacity-50"
+                          className="h-[30px] w-5 bg-primary border border-ink rounded-[20px] flex items-center justify-center shadow-[0px_4px_6px_rgba(20,13,10,0.15)] hover:bg-[#E89B55] transition-colors cursor-pointer disabled:opacity-50 p-0"
                           aria-label={`Diminuir quantidade de ${item.nft?.title}`}
                         >
                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M3.33333 8.66667V7.33333H12.6667V8.66667H3.33333Z" fill="black" />
                           </svg>
-                        </button>
+                        </Button>
                         <span className="font-mono font-normal text-[17px] text-foreground leading-[24px] min-w-[12px] text-center">
                           {item.quantity}
                         </span>
-                        <button
+                        <Button
                           type="button"
+                          size="icon"
                           onClick={() => handleUpdateQuantity(item.nftId, item.quantity, 1)}
                           disabled={updateMutation.isPending || removeMutation.isPending}
-                          className="h-[30px] w-5 bg-primary border border-ink rounded-[20px] flex items-center justify-center shadow-[0px_4px_6px_rgba(20,13,10,0.15)] hover:bg-[#E89B55] transition-colors cursor-pointer disabled:opacity-50"
+                          className="h-[30px] w-5 bg-primary border border-ink rounded-[20px] flex items-center justify-center shadow-[0px_4px_6px_rgba(20,13,10,0.15)] hover:bg-[#E89B55] transition-colors cursor-pointer disabled:opacity-50 p-0"
                           aria-label={`Aumentar quantidade de ${item.nft?.title}`}
                         >
                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M7.33333 8.66667H3.33333V7.33333H7.33333V3.33333H8.66667V7.33333H12.6667V8.66667H8.66667V12.6667H7.33333V8.66667Z" fill="black" />
                           </svg>
-                        </button>
+                        </Button>
                       </div>
 
                       {/* Total */}
@@ -344,15 +346,17 @@ function CartPage() {
 
                       {/* Delete */}
                       <div className="w-6 flex items-center justify-center">
-                        <button
+                        <Button
                           type="button"
+                          variant="ghost"
+                          size="icon"
                           onClick={() => handleRemoveItem(item.nftId)}
                           disabled={removeMutation.isPending}
-                          className="text-secondary hover:text-text-accent transition-colors cursor-pointer disabled:opacity-50"
+                          className="text-secondary hover:text-text-accent transition-colors cursor-pointer disabled:opacity-50 p-0 h-auto hover:bg-transparent"
                           aria-label={`Remover ${item.nft?.title} do carrinho`}
                         >
                           <TrashIcon className="size-6 text-secondary hover:text-text-accent" />
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   );
@@ -568,39 +572,43 @@ function CartPage() {
 
                 {/* Mobile Controls */}
                 <div className="flex items-center gap-1 shrink-0">
-                  <button
+                  <Button
                     type="button"
+                    size="icon"
                     onClick={() => handleUpdateQuantity(item.nftId, item.quantity, -1)}
                     disabled={updateMutation.isPending || removeMutation.isPending}
-                    className="size-6 rounded-full bg-surface-raised border border-border flex items-center justify-center cursor-pointer disabled:opacity-50"
+                    className="size-6 rounded-full bg-surface-raised border border-border flex items-center justify-center cursor-pointer disabled:opacity-50 p-0 hover:bg-surface-raised/80"
                     aria-label={`Diminuir quantidade de ${item.nft?.title}`}
                   >
                     <span className={`block w-2.5 h-0.5 ${item.quantity > 1 ? 'bg-foreground' : 'bg-[#55321F]'}`} />
-                  </button>
+                  </Button>
 
                   <span className="font-mono text-[16px] text-foreground min-w-[14px] text-center">
                     {item.quantity}
                   </span>
 
-                  <button
+                  <Button
                     type="button"
+                    size="icon"
                     onClick={() => handleUpdateQuantity(item.nftId, item.quantity, 1)}
                     disabled={updateMutation.isPending || removeMutation.isPending}
-                    className="size-6 rounded-full bg-surface-raised border border-border flex items-center justify-center font-mono text-[21px] text-foreground leading-none cursor-pointer disabled:opacity-50"
+                    className="size-6 rounded-full bg-surface-raised border border-border flex items-center justify-center font-mono text-[21px] text-foreground leading-none cursor-pointer disabled:opacity-50 p-0 hover:bg-surface-raised/80"
                     aria-label={`Aumentar quantidade de ${item.nft?.title}`}
                   >
                     +
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => handleRemoveItem(item.nftId)}
                     disabled={removeMutation.isPending}
-                    className="size-6 flex items-center justify-center text-secondary hover:text-text-accent cursor-pointer ml-1"
+                    className="size-6 flex items-center justify-center text-secondary hover:text-text-accent cursor-pointer ml-1 p-0 hover:bg-transparent"
                     aria-label={`Remover ${item.nft?.title}`}
                   >
                     <TrashIcon className="size-5 text-secondary" />
-                  </button>
+                  </Button>
                 </div>
               </div>
             ))

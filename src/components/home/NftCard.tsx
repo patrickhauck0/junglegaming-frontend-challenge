@@ -1,8 +1,9 @@
-import React from 'react';
+import type { MouseEvent } from 'react';
 import { Link } from '@tanstack/react-router';
 import type { Nft } from '@/contracts/nft';
 import { formatEthValue } from '@/utils/formatters';
 import { HeartIcon } from '@/components/ui/icons';
+import { Button, Badge } from '@/components/ui';
 import { useToggleFavorite } from '@/hooks/useNfts';
 
 interface NftCardProps {
@@ -12,7 +13,7 @@ interface NftCardProps {
 export function NftCard({ nft }: NftCardProps) {
   const toggleFavorite = useToggleFavorite();
 
-  const handleFavoriteClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     toggleFavorite.mutate({ nftId: nft.id, isFavorited: !nft.isFavorited });
@@ -43,20 +44,22 @@ export function NftCard({ nft }: NftCardProps) {
 
           {/* Badge RARO visível no mobile conforme Figma 14:5226 */}
           {isRare && (
-            <div className="md:hidden absolute top-0 left-0 bg-primary text-ink text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider rounded-br-[6px] shadow-sm">
+            <Badge className="md:hidden absolute top-0 left-0 bg-primary text-ink text-[10px] font-bold px-2 py-0.5 uppercase tracking-wider rounded-br-[6px] shadow-sm border-0">
               RARO
-            </div>
+            </Badge>
           )}
 
           {/* Botão de Favoritar: visível no mobile conforme Figma 14:5226, e no desktop em hover */}
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={handleFavoriteClick}
-            className="md:opacity-0 md:group-hover:opacity-100 absolute top-2 right-2 size-[28px] sm:size-[30px] rounded-full bg-surface-dark/70 hover:bg-surface-dark border border-border/40 flex items-center justify-center text-text-accent transition-all shadow-md focus-visible:ring-2 focus-visible:ring-primary"
+            className="md:opacity-0 md:group-hover:opacity-100 absolute top-2 right-2 size-[28px] sm:size-[30px] rounded-full bg-surface-dark/70 hover:bg-surface-dark border border-border/40 flex items-center justify-center text-text-accent transition-all shadow-md focus-visible:ring-2 focus-visible:ring-primary p-0 h-auto"
             aria-label={nft.isFavorited ? `Desfavoritar ${nft.title}` : `Favoritar ${nft.title}`}
           >
             <HeartIcon filled={nft.isFavorited} className="size-3.5 sm:size-4" />
-          </button>
+          </Button>
         </div>
 
         {/* Metadados: Título e Preço alinhados à esquerda (Figma: Roboto Mono) */}

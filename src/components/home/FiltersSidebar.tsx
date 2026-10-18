@@ -112,11 +112,12 @@ export function FiltersSidebar({
           {COLLECTIONS.map(({ label, count }) => {
             const isSelected = filters.collections?.includes(label) ?? false;
             return (
-              <button
+              <Button
                 key={label}
                 type="button"
+                variant="ghost"
                 onClick={() => toggleCollection(label)}
-                className="flex items-center justify-between w-full h-[40px] text-left cursor-pointer group select-none transition-colors"
+                className="flex items-center justify-between w-full h-[40px] text-left cursor-pointer group select-none transition-colors p-0 hover:bg-transparent rounded-none"
               >
                 <span
                   className={`font-mono text-[15px] leading-[40px] ${
@@ -134,7 +135,7 @@ export function FiltersSidebar({
                 >
                   ({count})
                 </span>
-              </button>
+              </Button>
             );
           })}
         </div>
@@ -230,11 +231,12 @@ export function FiltersSidebar({
           {NETWORKS.map(({ label, count }) => {
             const isSelected = filters.networks?.includes(label) ?? false;
             return (
-              <button
+              <Button
                 key={label}
                 type="button"
+                variant="ghost"
                 onClick={() => toggleNetwork(label)}
-                className="flex items-center justify-between w-full h-[40px] text-left cursor-pointer group select-none transition-colors"
+                className="flex items-center justify-between w-full h-[40px] text-left cursor-pointer group select-none transition-colors p-0 hover:bg-transparent rounded-none"
               >
                 <span
                   className={`font-mono text-[15px] leading-[40px] ${
@@ -252,7 +254,7 @@ export function FiltersSidebar({
                 >
                   ({count})
                 </span>
-              </button>
+              </Button>
             );
           })}
         </div>

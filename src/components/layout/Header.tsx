@@ -10,6 +10,7 @@ import {
   HeartIcon,
   WalletIcon,
 } from '@/components/ui/icons';
+import { Button, Input } from '@/components/ui';
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -104,32 +105,36 @@ export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) 
                 className="absolute right-0 flex items-center bg-surface-card border border-primary/60 rounded-[6px] px-3 py-1.5 shadow-xl w-[240px] sm:w-[280px] z-50 animate-in fade-in zoom-in-95 duration-150"
               >
                 <SearchIcon className="size-4 text-text-accent mr-2 shrink-0" />
-                <input
+                <Input
                   ref={searchInputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Buscar NFTs..."
-                  className="bg-transparent font-mono text-[14px] text-foreground placeholder:text-text-secondary focus-visible:outline-none w-full"
+                  className="bg-transparent font-mono text-[14px] text-foreground placeholder:text-text-secondary focus-visible:outline-none focus-visible:ring-0 border-0 p-0 h-auto w-full shadow-none"
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setSearchOpen(false)}
-                  className="p-1 text-text-secondary hover:text-foreground"
+                  className="size-5 p-0 text-text-secondary hover:text-foreground h-auto"
                   aria-label="Fechar busca"
                 >
                   <CloseIcon className="size-4" />
-                </button>
+                </Button>
               </form>
             ) : (
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={() => setSearchOpen(true)}
-                className="size-[20px] flex items-center justify-center text-foreground hover:text-text-accent transition-colors focus-visible:ring-2 focus-visible:ring-primary rounded cursor-pointer"
+                className="size-[20px] flex items-center justify-center text-foreground hover:text-text-accent transition-colors focus-visible:ring-2 focus-visible:ring-primary rounded cursor-pointer p-0 h-auto"
                 aria-label="Abrir campo de busca de NFTs"
               >
                 <SearchIcon className="size-[20px]" />
-              </button>
+              </Button>
             )}
           </div>
 
@@ -187,8 +192,10 @@ export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) 
                 <WalletIcon className="size-4" />
               </Link>
 
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={async () => {
                   await logout();
                   navigate({ to: '/' });
@@ -198,7 +205,7 @@ export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) 
               >
                 <LogoutIcon className="size-4" />
                 <span className="hidden sm:inline">Sair</span>
-              </button>
+              </Button>
             </div>
           ) : (
             <Link

@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/icons';
 import { Button } from '@/components/ui';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 export const Route = createFileRoute('/nfts/$id')({
   component: NftDetailsPage,
@@ -682,89 +683,88 @@ function NftDetailsPage() {
 
         {/* 2. SEÇÃO DE ABAS: DETALHES DO NFT / AVALIAÇÕES (Figma Node 70342:2780) */}
         <section className="flex flex-col gap-[20px] w-full border-t border-border pt-8">
-          <div className="flex items-center gap-[32px] relative border-b border-border pb-3">
-            <button
-              type="button"
-              onClick={() => setActiveTab('details')}
-              className={`font-mono text-[17px] leading-[16px] transition-colors relative cursor-pointer pb-2 ${
-                activeTab === 'details'
-                  ? 'font-bold text-text-accent'
-                  : 'font-normal text-foreground hover:text-text-accent'
-              }`}
-            >
-              Detalhes do NFT
-              {activeTab === 'details' && (
-                <span className="absolute -bottom-3 left-0 right-0 h-[2px] bg-primary rounded-full" />
-              )}
-            </button>
+          <Tabs
+            defaultValue="details"
+            value={activeTab}
+            onValueChange={(val) => setActiveTab(val as 'details' | 'reviews')}
+            className="w-full"
+          >
+            <TabsList className="bg-transparent border-b border-border w-full justify-start rounded-none p-0 h-auto gap-[32px] pb-3">
+              <TabsTrigger
+                value="details"
+                className="font-mono text-[17px] leading-[16px] transition-colors relative cursor-pointer pb-2 bg-transparent border-0 rounded-none shadow-none p-0 data-[state=active]:font-bold data-[state=active]:text-text-accent data-[state=inactive]:font-normal data-[state=inactive]:text-foreground data-[state=inactive]:hover:text-text-accent"
+              >
+                Detalhes do NFT
+                {activeTab === 'details' && (
+                  <span className="absolute -bottom-3 left-0 right-0 h-[2px] bg-primary rounded-full" />
+                )}
+              </TabsTrigger>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('reviews')}
-              className={`font-mono text-[17px] leading-[16px] transition-colors relative cursor-pointer pb-2 ${
-                activeTab === 'reviews'
-                  ? 'font-bold text-text-accent'
-                  : 'font-normal text-foreground hover:text-text-accent'
-              }`}
-            >
-              Avaliações de colecionadores (19)
-              {activeTab === 'reviews' && (
-                <span className="absolute -bottom-3 left-0 right-0 h-[2px] bg-primary rounded-full" />
-              )}
-            </button>
-          </div>
+              <TabsTrigger
+                value="reviews"
+                className="font-mono text-[17px] leading-[16px] transition-colors relative cursor-pointer pb-2 bg-transparent border-0 rounded-none shadow-none p-0 data-[state=active]:font-bold data-[state=active]:text-text-accent data-[state=inactive]:font-normal data-[state=inactive]:text-foreground data-[state=inactive]:hover:text-text-accent"
+              >
+                Avaliações de colecionadores (19)
+                {activeTab === 'reviews' && (
+                  <span className="absolute -bottom-3 left-0 right-0 h-[2px] bg-primary rounded-full" />
+                )}
+              </TabsTrigger>
+            </TabsList>
 
-          {activeTab === 'details' ? (
-            <div className="flex flex-col gap-6 font-mono text-[14px] text-text-secondary leading-[24px]">
-              <p>
-                {nft.title} é uma obra digital {selectedEdition} finalizada à mão da coleção Kurio
-                Editions. Cada atributo fica armazenado nos metadados do token e verificado na{' '}
-                {nft.network}. A obra explora identidade, movimento e luz em um mundo digital sem
-                fronteiras.
-              </p>
-              <p>
-                A propriedade inclui a arte em alta resolução, lançamentos exclusivos para
-                colecionadores e um registro permanente de procedência registrada na rede.{' '}
-                {nft.creator.name} recebe 5% de direitos autorais nas vendas secundárias, apoiando
-                novos trabalhos e lançamentos da comunidade.
-              </p>
-
-              <div className="flex flex-col gap-1 pt-2">
-                <p className="font-bold text-foreground">Rede:</p>
-                <p>Cunhado na {nft.network} com procedência imutável e metadados no IPFS.</p>
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <p className="font-bold text-foreground">Contrato:</p>
+            <TabsContent value="details" className="mt-4">
+              <div className="flex flex-col gap-6 font-mono text-[14px] text-text-secondary leading-[24px]">
                 <p>
-                  Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente
-                  pelos mercados compatíveis.
+                  {nft.title} é uma obra digital {selectedEdition} finalizada à mão da coleção Kurio
+                  Editions. Cada atributo fica armazenado nos metadados do token e verificado na{' '}
+                  {nft.network}. A obra explora identidade, movimento e luz em um mundo digital sem
+                  fronteiras.
+                </p>
+                <p>
+                  A propriedade inclui a arte em alta resolução, lançamentos exclusivos para
+                  colecionadores e um registro permanente de procedência registrada na rede.{' '}
+                  {nft.creator.name} recebe 5% de direitos autorais nas vendas secundárias, apoiando
+                  novos trabalhos e lançamentos da comunidade.
+                </p>
+
+                <div className="flex flex-col gap-1 pt-2">
+                  <p className="font-bold text-foreground">Rede:</p>
+                  <p>Cunhado na {nft.network} com procedência imutável e metadados no IPFS.</p>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <p className="font-bold text-foreground">Contrato:</p>
+                  <p>
+                    Direitos autorais do criador: 5% nas vendas secundárias, pagos automaticamente
+                    pelos mercados compatíveis.
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <p className="font-bold text-foreground">Direitos autorais:</p>
+                  <p>0x7A42...19E8 • Contrato inteligente ERC-721 verificado.</p>
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="reviews" className="mt-4">
+              <div className="flex flex-col gap-4 py-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <StarIcon key={`rev-star-${i}`} filled className="size-4" />
+                    ))}
+                  </div>
+                  <span className="font-mono text-sm text-foreground font-bold">4.8 de 5</span>
+                  <span className="font-mono text-sm text-text-secondary">
+                    (19 avaliações verificadas de colecionadores)
+                  </span>
+                </div>
+                <p className="font-mono text-xs text-text-secondary">
+                  Todas as avaliações são registradas por carteiras verificadas na rede.
                 </p>
               </div>
-
-              <div className="flex flex-col gap-1">
-                <p className="font-bold text-foreground">Direitos autorais:</p>
-                <p>0x7A42...19E8 • Contrato inteligente ERC-721 verificado.</p>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-4 py-4">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <StarIcon key={`rev-star-${i}`} filled className="size-4" />
-                  ))}
-                </div>
-                <span className="font-mono text-sm text-foreground font-bold">4.8 de 5</span>
-                <span className="font-mono text-sm text-text-secondary">
-                  (19 avaliações verificadas de colecionadores)
-                </span>
-              </div>
-              <p className="font-mono text-xs text-text-secondary">
-                Todas as avaliações são registradas por carteiras verificadas na rede.
-              </p>
-            </div>
-          )}
+            </TabsContent>
+          </Tabs>
         </section>
 
         {/* 3. SEÇÃO "MAIS DESTA COLEÇÃO" (Figma Node 70364:239) */}
