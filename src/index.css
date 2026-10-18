@@ -1,0 +1,63 @@
+@import '@fontsource/roboto-mono/400.css';
+@import '@fontsource/roboto-mono/500.css';
+@import '@fontsource/roboto-mono/700.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: #140d0a;
+  --color-surface-card: #241612;
+  --color-surface-raised: #2f1d15;
+  --color-surface-dark: #38220f;
+  --color-border: #3f2319;
+  --color-border-soft: #55321f;
+  --color-primary: #d28a4c;
+  --color-primary-hover: #e08a3c;
+  --color-text-accent: #e89b55;
+  --color-secondary: #b39463;
+  --color-amber: #e3a44e;
+  --color-text-primary: #f7f3ec;
+  --color-foreground: #f5f1eb;
+  --color-text-secondary: #cfb28c;
+  --color-text-coral: #f0805f;
+  --color-success: #00a66c;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-foreground);
+    font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    overflow-x: hidden;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Anel de foco visível e acessível conforme diretrizes WCAG */
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

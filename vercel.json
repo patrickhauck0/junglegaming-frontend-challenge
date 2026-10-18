@@ -1,0 +1,19 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/mockServiceWorker.js",
+      "destination": "/mockServiceWorker.js"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/assets/$1"
+    },
+    {
+      "source": "/((?!mockServiceWorker\\.js|assets/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
