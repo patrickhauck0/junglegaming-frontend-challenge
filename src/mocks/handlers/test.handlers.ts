@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { resetDb } from '../db';
 import { setScenarioConfig, resetScenarioConfig, type ScenarioConfig } from '../scenarios';
+import { broadcastNftUpdated, broadcastOrderUpdated } from '../ws';
 
 export const testHandlers = [
   http.post('/api/__test__/reset', async ({ request }) => {
@@ -30,5 +31,17 @@ export const testHandlers = [
       success: true,
       scenario: updated,
     });
+  }),
+
+  http.post('/api/__test__/emit-nft-updated', async ({ request }) => {
+    const body = (await request.json()) as { nftId: string; priceEth?: string; availableEditions?: number };
+    const event = broadcastNftUpdated(body.nftId, body.priceEth, body.availableEditions);
+    return HttpResponse.json({ success: true, event });
+  }),
+
+  http.post('/api/__test__/emit-order-updated', async ({ request }) => {
+    const body = (await request.json()) as { orderId: string; status: 'confirmed' | 'declined'; userId?: string };
+    const event = broadcastOrderUpdated(body.orderId, body.status, body.userId);
+    return HttpResponse.json({ success: true, event });
   }),
 ];

@@ -1,6 +1,15 @@
 import { useState, useRef, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { KurioLogo, SearchIcon, CartIcon, LogoutIcon, CloseIcon } from '@/components/ui/icons';
+import { useAuth } from '@/hooks/useAuth';
+import {
+  KurioLogo,
+  SearchIcon,
+  CartIcon,
+  LogoutIcon,
+  CloseIcon,
+  HeartIcon,
+  WalletIcon,
+} from '@/components/ui/icons';
 
 interface HeaderProps {
   cartItemCount?: number;
@@ -8,6 +17,7 @@ interface HeaderProps {
 }
 
 export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) {
+  const { user, logout } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -137,14 +147,68 @@ export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) 
             )}
           </Link>
 
-          {/* Botão Entrar (Figma: w-[100px] h-[35px] rounded-[6px] bg-[#D28A4C]) */}
-          <Link
-            to="/login"
-            className="w-[100px] h-[35px] bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-medium text-[16px] rounded-[6px] flex items-center justify-center gap-[4px] transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-foreground"
-          >
-            <LogoutIcon className="size-[20px]" />
-            <span>Entrar</span>
-          </Link>
+          {/* Usuário Autenticado ou Botão Entrar */}
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Link
+                to="/profile"
+                className="flex items-center gap-2 px-2.5 py-1 rounded-[6px] bg-surface-card border border-border hover:border-primary transition-colors font-mono text-[14px] text-foreground"
+                aria-label="Ir para perfil do colecionador"
+              >
+                {user.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.name || user.username}
+                    className="size-6 rounded-full object-cover border border-primary/40"
+                  />
+                ) : (
+                  <div className="size-6 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">
+                    {(user.name || user.username || 'U').charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="hidden sm:inline font-bold truncate max-w-[110px]">
+                  {user.name || user.username}
+                </span>
+              </Link>
+
+              <Link
+                to="/favorites"
+                className="size-[35px] rounded-[6px] bg-surface-card border border-border hover:border-primary flex items-center justify-center text-foreground hover:text-text-accent transition-colors"
+                aria-label="Ver NFTs favoritos"
+              >
+                <HeartIcon className="size-4" />
+              </Link>
+
+              <Link
+                to="/wallets"
+                className="size-[35px] rounded-[6px] bg-surface-card border border-border hover:border-primary flex items-center justify-center text-foreground hover:text-text-accent transition-colors"
+                aria-label="Ver carteiras cadastradas"
+              >
+                <WalletIcon className="size-4" />
+              </Link>
+
+              <button
+                type="button"
+                onClick={async () => {
+                  await logout();
+                  navigate({ to: '/' });
+                }}
+                className="h-[35px] px-2.5 rounded-[6px] bg-surface-raised border border-border hover:border-red-500/50 hover:text-red-400 text-secondary font-mono text-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                aria-label="Sair da conta"
+              >
+                <LogoutIcon className="size-4" />
+                <span className="hidden sm:inline">Sair</span>
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="w-[100px] h-[35px] bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-medium text-[16px] rounded-[6px] flex items-center justify-center gap-[4px] transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-foreground"
+            >
+              <LogoutIcon className="size-[20px]" />
+              <span>Entrar</span>
+            </Link>
+          )}
         </div>
       </div>
     </header>

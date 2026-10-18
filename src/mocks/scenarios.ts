@@ -1,5 +1,5 @@
 export type ErrorMode = '400' | '401' | '403' | '404' | '409' | '500' | 'timeout' | null;
-export type PaymentMode = 'confirmed' | 'declined' | 'timeout';
+export type PaymentMode = 'confirmed' | 'declined' | 'pending' | 'timeout';
 
 export interface ScenarioConfig {
   latencyMs: number;

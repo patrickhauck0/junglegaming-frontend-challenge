@@ -3,6 +3,13 @@ import { getDb } from '../db';
 import { getScenarioConfig } from '../scenarios';
 import { compareEth } from '@/utils/eth-math';
 
+function extractUserId(request: Request): string | null {
+  const auth = request.headers.get('Authorization');
+  if (!auth) return null;
+  const match = auth.match(/token_(user_[^_\s]+)/);
+  return match ? match[1] ?? null : null;
+}
+
 export const nftHandlers = [
   http.get('/api/nfts', async ({ request }) => {
     const scenario = getScenarioConfig();
@@ -81,8 +88,16 @@ export const nftHandlers = [
     const startIndex = (page - 1) * limit;
     const paginated = filtered.slice(startIndex, startIndex + limit);
 
+    const userId = extractUserId(request);
+    const userFavs = userId && db.favorites[userId] ? db.favorites[userId] : [];
+
+    const mapped = paginated.map((nft) => ({
+      ...nft,
+      isFavorited: userFavs.includes(nft.id),
+    }));
+
     return HttpResponse.json({
-      data: paginated,
+      data: mapped,
       total,
       page,
       limit,
@@ -90,7 +105,7 @@ export const nftHandlers = [
     });
   }),
 
-  http.get('/api/nfts/:id', async ({ params }) => {
+  http.get('/api/nfts/:id', async ({ request, params }) => {
     const scenario = getScenarioConfig();
     await delay(scenario.latencyMs);
 
@@ -110,6 +125,12 @@ export const nftHandlers = [
       );
     }
 
-    return HttpResponse.json(nft);
+    const userId = extractUserId(request);
+    const isFavorited = userId && db.favorites[userId] ? db.favorites[userId].includes(nft.id) : false;
+
+    return HttpResponse.json({
+      ...nft,
+      isFavorited,
+    });
   }),
 ];

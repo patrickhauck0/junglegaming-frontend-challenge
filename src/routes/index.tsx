@@ -94,7 +94,7 @@ function HomePage() {
     el?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const totalPages = Math.max(4, data?.totalPages || 4);
+  const totalPages = data?.totalPages || 1;
 
   return (
     <div className="w-full flex flex-col items-center">
@@ -368,7 +368,11 @@ function HomePage() {
 
             {/* Grid de Cards de NFTs (Figma Node 70342:2828: 3 colunas desktop, 2 colunas mobile) */}
             {isLoading ? (
-              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-3 sm:gap-x-4 lg:gap-x-[34px] gap-y-6 sm:gap-y-8 lg:gap-y-[72px] justify-items-center">
+              <div
+                role="status"
+                aria-label="Carregando catálogo de NFTs"
+                className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-x-3 sm:gap-x-4 lg:gap-x-[34px] gap-y-6 sm:gap-y-8 lg:gap-y-[72px] justify-items-center"
+              >
                 {Array.from({ length: 9 }).map((_, index) => (
                   <div
                     key={`skeleton-${index}`}
@@ -425,7 +429,7 @@ function HomePage() {
               className="flex items-center justify-end gap-[8px] pt-8"
               aria-label="Paginação do catálogo"
             >
-              {[1, 2, 3, 4].map((pageNum) => {
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
                 const isActive = pageNum === currentPage;
                 return (
                   <button

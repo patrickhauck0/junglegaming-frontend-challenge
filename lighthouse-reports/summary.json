@@ -1,0 +1,251 @@
+{
+  "timestamp": "2026-10-18T17:24:04.533Z",
+  "thresholds": {
+    "performance": 90,
+    "accessibility": 95,
+    "bestPractices": 95,
+    "seo": 90
+  },
+  "targets": [
+    {
+      "target": "Início",
+      "key": "home",
+      "url": "http://127.0.0.1:4173/",
+      "profile": "desktop",
+      "profileName": "Desktop (1440x900)",
+      "runs": [
+        {
+          "run": 1,
+          "scores": {
+            "performance": 100,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 0.71,
+            "cls": 0.0029,
+            "tbt": 0
+          }
+        },
+        {
+          "run": 2,
+          "scores": {
+            "performance": 99,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 0.75,
+            "cls": 0.0029,
+            "tbt": 0
+          }
+        },
+        {
+          "run": 3,
+          "scores": {
+            "performance": 99,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 0.78,
+            "cls": 0.0029,
+            "tbt": 0
+          }
+        }
+      ],
+      "median": {
+        "performance": 99,
+        "accessibility": 95,
+        "bestPractices": 96,
+        "seo": 92,
+        "lcp": 0.75,
+        "cls": 0.0029,
+        "tbt": 0
+      },
+      "meetsThresholds": {
+        "performance": true,
+        "accessibility": true,
+        "bestPractices": true,
+        "seo": true
+      }
+    },
+    {
+      "target": "Início",
+      "key": "home",
+      "url": "http://127.0.0.1:4173/",
+      "profile": "mobile",
+      "profileName": "Mobile (390x844)",
+      "runs": [
+        {
+          "run": 1,
+          "scores": {
+            "performance": 98,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 2.14,
+            "cls": 0.0004,
+            "tbt": 0
+          }
+        },
+        {
+          "run": 2,
+          "scores": {
+            "performance": 98,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 2.14,
+            "cls": 0.0004,
+            "tbt": 0
+          }
+        },
+        {
+          "run": 3,
+          "scores": {
+            "performance": 99,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 2.04,
+            "cls": 0.0004,
+            "tbt": 0
+          }
+        }
+      ],
+      "median": {
+        "performance": 98,
+        "accessibility": 95,
+        "bestPractices": 96,
+        "seo": 92,
+        "lcp": 2.14,
+        "cls": 0.0004,
+        "tbt": 0
+      },
+      "meetsThresholds": {
+        "performance": true,
+        "accessibility": true,
+        "bestPractices": true,
+        "seo": true
+      }
+    },
+    {
+      "target": "Detalhes do NFT",
+      "key": "nft-details",
+      "url": "http://127.0.0.1:4173/nfts/nft_01",
+      "profile": "desktop",
+      "profileName": "Desktop (1440x900)",
+      "runs": [
+        {
+          "run": 1,
+          "scores": {
+            "performance": 99,
+            "accessibility": 96,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 0.83,
+            "cls": 0.0001,
+            "tbt": 0
+          }
+        },
+        {
+          "run": 2,
+          "scores": {
+            "performance": 99,
+            "accessibility": 96,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 0.84,
+            "cls": 0.0001,
+            "tbt": 0
+          }
+        },
+        {
+          "run": 3,
+          "scores": {
+            "performance": 99,
+            "accessibility": 96,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 0.83,
+            "cls": 0.0001,
+            "tbt": 0
+          }
+        }
+      ],
+      "median": {
+        "performance": 99,
+        "accessibility": 96,
+        "bestPractices": 96,
+        "seo": 92,
+        "lcp": 0.83,
+        "cls": 0.0001,
+        "tbt": 0
+      },
+      "meetsThresholds": {
+        "performance": true,
+        "accessibility": true,
+        "bestPractices": true,
+        "seo": true
+      }
+    },
+    {
+      "target": "Detalhes do NFT",
+      "key": "nft-details",
+      "url": "http://127.0.0.1:4173/nfts/nft_01",
+      "profile": "mobile",
+      "profileName": "Mobile (390x844)",
+      "runs": [
+        {
+          "run": 1,
+          "scores": {
+            "performance": 98,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 2.1,
+            "cls": 0.0057,
+            "tbt": 0
+          }
+        },
+        {
+          "run": 2,
+          "scores": {
+            "performance": 98,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 2.11,
+            "cls": 0.0057,
+            "tbt": 0
+          }
+        },
+        {
+          "run": 3,
+          "scores": {
+            "performance": 98,
+            "accessibility": 95,
+            "bestPractices": 96,
+            "seo": 92,
+            "lcp": 2.12,
+            "cls": 0.0059,
+            "tbt": 0
+          }
+        }
+      ],
+      "median": {
+        "performance": 98,
+        "accessibility": 95,
+        "bestPractices": 96,
+        "seo": 92,
+        "lcp": 2.11,
+        "cls": 0.0057,
+        "tbt": 0
+      },
+      "meetsThresholds": {
+        "performance": true,
+        "accessibility": true,
+        "bestPractices": true,
+        "seo": true
+      }
+    }
+  ]
+}

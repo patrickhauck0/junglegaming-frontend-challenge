@@ -1,6 +1,162 @@
-# Desafio Frontend — Marketplace de NFTs
+# KURIO — NFT Marketplace (GreenMint)
 
-Implemente o **NFT Marketplace** em React e TypeScript, seguindo o [layout no Figma](https://www.figma.com/design/Ff0SksUi7UFtPWUO8kyNtw/Frontend-Challenge?node-id=0-1).
+> Implementação 1:1 (pixel-perfect) do **NFT Marketplace** em React 18, TypeScript e Tailwind CSS, integrada à stack obrigatória com TanStack Router, TanStack Query, Axios, shadcn/ui, Socket.IO e Mock Service Worker (MSW).
+> 
+> Documentação técnica detalhada, contratos e decisões de arquitetura disponíveis em [**`ARCHITECTURE.md`**](./ARCHITECTURE.md).
+
+---
+
+## 🚀 Guia de Execução a partir de um Checkout Limpo
+
+### 1. Pré-requisitos
+- **Node.js:** Versão 20+ ou 22+ recomendada.
+- **NPM:** Versão 10+.
+
+### 2. Instalação e Variáveis de Ambiente
+```bash
+# 1. Clone o repositório e acesse a pasta raiz
+git clone <url-do-repositorio>
+cd junglegaming-frontend-challenge
+
+# 2. Instale as dependências (incluindo Playwright e Lighthouse)
+npm install
+
+# 3. Configure as variáveis de ambiente (o arquivo .env.example já está pronto para uso)
+cp .env.example .env.local
+```
+
+### 3. Scripts e Comandos Disponíveis
+
+| Comando | Descrição |
+| :--- | :--- |
+| `npm run dev` | Inicia o servidor de desenvolvimento Vite (`http://localhost:5173`) com MSW e WebSockets ativos. |
+| `npm run build` | Valida tipagens (`tsc -b`) e compila o bundle de produção otimizado em `dist/`. |
+| `npm run preview` | Sobe o servidor local de preview servindo o build de produção em `http://127.0.0.1:4173/`. |
+| `npm run typecheck` | Executa a verificação estrita de tipos do TypeScript sem emitir arquivos (`tsc --noEmit`). |
+| `npm run lint` | Executa a análise estática com ESLint em toda a pasta `src/`. |
+| `npm run test:e2e` | Executa a suíte completa de **51 testes Playwright** (12 cenários funcionais + regressão visual) em Chromium Desktop, Tablet e Mobile. |
+| `npm run test:e2e:ui` | Abre o painel interativo do Playwright Test Runner com depuração e inspeção de DOM/Time-travel. |
+| `npm run lighthouse` | Executa a auditoria oficial do Lighthouse (3 medições por página/perfil, medianas e relatórios em `lighthouse-reports/`). |
+
+---
+
+## 👥 Credenciais Fictícias de Teste
+
+O banco de dados do MSW possui dois usuários cadastrados para validação de fluxos de login, perfil, carteiras e isolamento de sessão:
+
+| Usuário | E-mail | Senha | Carteira Principal | Saldo Inicial |
+| :--- | :--- | :--- | :--- | :---: |
+| **Alexandre Hauck** | `alexandre@kurio.art` | `kurio123` | `0x71C2B895C984c3B821A858712e96d9978EbC4982` | `14.50 ETH` |
+| **Beatriz Mendes** | `beatriz@kurio.art` | `kurio123` | `0x3F91A429b8214C2361A971182A732104975e54A1` | `8.20 ETH` |
+
+> *Nota:* Qualquer novo cadastro via `/register` cria um novo usuário no banco do MSW com persistência em `localStorage`.
+
+---
+
+## 🎛️ Controle e Seleção de Cenários do MSW
+
+O MSW é executado na camada de rede pelo Service Worker (`public/mockServiceWorker.js`) e intercepta tanto chamadas REST (`/api/*`) quanto conexões WebSocket (`@mswjs/socket.io-binding`).
+
+### Endpoints de Controle para Testes e Demonstração:
+
+1. **Reset Total da Base:**
+   ```bash
+   curl -X POST http://localhost:5173/api/__test__/reset
+   ```
+   Restaura integralmente os 32 NFTs, os 2 usuários, carteiras, carrinhos, pedidos e limpa erros forçados.
+
+2. **Configuração de Cenários de Falha:**
+   ```bash
+   curl -X POST http://localhost:5173/api/__test__/scenario \
+     -H "Content-Type: application/json" \
+     -d '{"latencyMs": 1500, "errorMode": null, "paymentMode": "confirmed"}'
+   ```
+   - `latencyMs`: tempo de atraso artificial em milissegundos (ex: `1500`).
+   - `errorMode`: `'500'` | `'401'` | `'403'` | `'409'` | `'timeout'` | `null`.
+   - `paymentMode`: `'confirmed'` | `'declined'` | `'pending'` | `'timeout'`.
+
+3. **Disparo de Eventos Socket.IO em Tempo Real:**
+   - **Atualização de Preço (`nft.updated`):**
+     ```bash
+     curl -X POST http://localhost:5173/api/__test__/emit-nft-updated \
+       -H "Content-Type: application/json" \
+       -d '{"nftId": "nft_01", "priceEth": "2.99", "availableEditions": 5}'
+     ```
+   - **Atualização de Pedido (`order.updated`):**
+     ```bash
+     curl -X POST http://localhost:5173/api/__test__/emit-order-updated \
+       -H "Content-Type: application/json" \
+       -d '{"orderId": "<id-do-pedido>", "status": "confirmed"}'
+     ```
+
+---
+
+## 🧪 Como Reproduzir os Fluxos de Falha e Resiliência
+
+### 1. Latência Alta e Shimmer Skeletons sem CLS
+1. Configure latência de 2 segundos:
+   `curl -X POST http://localhost:5173/api/__test__/scenario -H "Content-Type: application/json" -d '{"latencyMs": 2000}'`
+2. Recarregue a página `/` ou `/nfts/nft_01`.
+3. **Comportamento observado:** A interface exibe os esqueletos pulsantes com efeito shimmer sem causar nenhum salto de layout (Cumulative Layout Shift = 0).
+
+### 2. Falha 500 no Catálogo e Recuperação
+1. Ative o modo de erro 500:
+   `curl -X POST http://localhost:5173/api/__test__/scenario -H "Content-Type: application/json" -d '{"errorMode": "500"}'`
+2. No catálogo (`/`), veja a mensagem de erro amigável com o botão *"Tentar novamente"*.
+3. Restaure o cenário:
+   `curl -X POST http://localhost:5173/api/__test__/scenario -H "Content-Type: application/json" -d '{"errorMode": null}'`
+4. Clique em *"Tentar novamente"*: o catálogo recupera os dados imediatamente sem necessidade de recarregar a página.
+
+### 3. Atualização Otimista com Rollback (Favoritos)
+1. Ative o erro 500:
+   `curl -X POST http://localhost:5173/api/__test__/scenario -H "Content-Type: application/json" -d '{"errorMode": "500"}'`
+2. Na página inicial ou no detalhe do NFT, clique no ícone de coração para favoritar.
+3. **Comportamento observado:** O ícone fica preenchido imediatamente (otimista). Quando a API retorna erro 500, o estado reverte suavemente (*rollback*) para desmarcado e uma notificação informa a falha transitória.
+
+### 4. Sessão Expirada com Retomada do Fluxo
+1. Faça login com `alexandre@kurio.art` e navegue até `/cart`.
+2. No Console do navegador (DevTools), execute `localStorage.removeItem('__kurio_auth_user__')` ou acione um erro 401.
+3. Clique em *"Conectar e finalizar"*.
+4. **Comportamento observado:** A aplicação bloqueia o acesso à rota privada `/payment`, redireciona para `/login?redirect=%2Fpayment` e, após login, retoma exatamente o checkout com todos os itens do carrinho preservados.
+
+### 5. Cupons Válidos, Inválidos e Expirados
+1. No Carrinho (`/cart`), insira no campo de código promocional:
+   - `KURIO10`: Aplica 10% de desconto no subtotal.
+   - `ETH5`: Aplica desconto fixo de 0.05 ETH.
+   - `CUPOMINVALIDO`: Exibe feedback visual de erro informando cupom inexistente.
+   - `EXPIRADO2025`: Exibe feedback visual de erro informando cupom fora da validade.
+
+### 6. Mudança de Preço via Socket.IO no Checkout (`nft.updated`)
+1. Adicione o NFT *Emerald Ape #042* ao carrinho e avance para `/payment`.
+2. Em outro terminal, altere a cotação do NFT em tempo real:
+   `curl -X POST http://localhost:5173/api/__test__/emit-nft-updated -H "Content-Type: application/json" -d '{"nftId": "nft_01", "priceEth": "3.50"}'`
+3. **Comportamento observado:** Um banner de alerta âmbar surge imediatamente no topo do checkout informando a variação de cotação e o botão de confirmação é bloqueado até que o usuário revise o novo resumo de valores.
+
+### 7. Pagamento Recusado e Prevenção de Duplo Clique
+1. Configure o modo de pagamento para recusa:
+   `curl -X POST http://localhost:5173/api/__test__/scenario -H "Content-Type: application/json" -d '{"paymentMode": "declined"}'`
+2. No pagamento, clique em *"Pagar e confirmar pedido"*.
+3. **Comportamento observado:** O botão desabilita exibindo spinner com chave de idempotência fixa. O pedido transiciona para o estado recusado com mensagem amigável e os itens no carrinho são preservados para nova tentativa.
+
+---
+
+## 📊 Resultados dos Testes E2E e Auditoria Lighthouse
+
+### Playwright E2E (`npm run test:e2e`)
+- **Total de Testes:** 51
+- **Aprovados:** 50 (100% dos testes executados)
+- **Cenários Cobertos:** 12 cenários funcionais obrigatórios + Regressão Visual Desktop e Mobile.
+- **Relatório HTML e Baselines:** versionados em `playwright-report/` e `tests/e2e/13-visual-regression.spec.ts-snapshots/`.
+
+### Auditoria Lighthouse (`npm run lighthouse`)
+- **Início Desktop:** Performance **99** | Acessibilidade **95** | Melhores Práticas **96** | SEO **92** | LCP **0.75s** | CLS **0.0029** | TBT **0ms**
+- **Início Mobile:** Performance **98** | Acessibilidade **95** | Melhores Práticas **96** | SEO **92** | LCP **2.14s** | CLS **0.0004** | TBT **0ms**
+- **Detalhes Desktop:** Performance **99** | Acessibilidade **96** | Melhores Práticas **96** | SEO **92** | LCP **0.83s** | CLS **0.0001** | TBT **0ms**
+- **Detalhes Mobile:** Performance **98** | Acessibilidade **95** | Melhores Práticas **96** | SEO **92** | LCP **2.11s** | CLS **0.0057** | TBT **0ms**
+
+---
+
+# Enunciado do Desafio Original
 
 O desafio avalia fidelidade visual, qualidade das interações, integração com APIs, gerenciamento de estado assíncrono, tempo real, acessibilidade e performance.
 

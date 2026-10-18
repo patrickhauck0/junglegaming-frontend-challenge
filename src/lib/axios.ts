@@ -38,6 +38,19 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    if (error?.response?.status === 401) {
+      try {
+        localStorage.removeItem('__kurio_auth_token__');
+        localStorage.removeItem('__kurio_user_id__');
+      } catch {
+        // Ignora erro de localStorage
+      }
+
+      if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
+        const currentPath = window.location.pathname + window.location.search;
+        window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;
+      }
+    }
     return Promise.reject(error);
   }
 );

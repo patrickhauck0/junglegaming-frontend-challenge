@@ -17,6 +17,8 @@ import {
   ShareMailIcon,
   CartIcon,
 } from '@/components/ui/icons';
+import { Button } from '@/components/ui';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export const Route = createFileRoute('/nfts/$id')({
   component: NftDetailsPage,
@@ -39,6 +41,7 @@ function NftDetailsPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'details' | 'reviews'>('details');
   const [buyFeedback, setBuyFeedback] = useState<string | null>(null);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
 
   // Consultas
   const { data: nft, isLoading, isError } = useNft(id);
@@ -98,24 +101,112 @@ function NftDetailsPage() {
   // 1. Estado de Carregamento (Shimmer Skeleton sem CLS)
   if (isLoading) {
     return (
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[120px] py-6 sm:py-8">
-        <ShimmerSkeleton className="w-[180px] h-5 rounded mb-8" />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[32px] mb-16">
-          <div className="flex gap-4 sm:gap-[28px] h-[360px] sm:h-[448px]">
-            <div className="hidden sm:flex flex-col gap-4 w-[100px]">
+      <div
+        role="status"
+        aria-label="Carregando detalhes do NFT"
+        className="w-full flex flex-col items-center bg-ink"
+      >
+        {/* Skeleton Mobile (390px) */}
+        <div className="md:hidden w-full flex flex-col relative pb-[180px]">
+          <div className="relative w-full h-[460px] p-4 flex flex-col justify-between bg-surface-card/60">
+            <div className="flex items-center justify-between w-full">
+              <ShimmerSkeleton className="size-[35px] rounded-full" />
+              <ShimmerSkeleton className="size-[35px] rounded-full" />
+            </div>
+            <div className="relative w-full h-[356px] rounded-[24px] overflow-hidden">
+              <ShimmerSkeleton className="w-full h-full rounded-[24px]" />
+            </div>
+            <div className="flex items-center justify-center gap-1.5 pb-2">
               {Array.from({ length: 4 }).map((_, i) => (
-                <ShimmerSkeleton key={`thumb-${i}`} className="size-[100px] rounded-[8px]" />
+                <ShimmerSkeleton key={`dot-skel-${i}`} className="w-2 h-1.5 rounded-full" />
               ))}
             </div>
-            <ShimmerSkeleton className="flex-1 sm:size-[444px] rounded-[24px]" />
           </div>
-          <div className="flex flex-col gap-6">
-            <ShimmerSkeleton className="w-3/4 h-8 rounded" />
-            <ShimmerSkeleton className="w-1/3 h-6 rounded" />
-            <ShimmerSkeleton className="w-full h-20 rounded" />
-            <ShimmerSkeleton className="w-1/2 h-10 rounded" />
-            <ShimmerSkeleton className="w-2/3 h-12 rounded" />
+          <div className="bg-surface-card rounded-t-[31px] -mt-6 p-6 flex flex-col gap-4 relative z-10 shadow-xl border-t border-border/40">
+            <div className="flex items-center justify-between w-full">
+              <ShimmerSkeleton className="w-[180px] h-[24px] rounded" />
+              <ShimmerSkeleton className="w-[70px] h-[24px] rounded-[32px]" />
+            </div>
+            <ShimmerSkeleton className="w-full h-[48px] rounded" />
+            <ShimmerSkeleton className="w-full h-[60px] rounded-[8px]" />
           </div>
+        </div>
+
+        {/* Skeleton Desktop (1440px) */}
+        <div className="hidden md:flex flex-col max-w-[1440px] w-full px-6 lg:px-[120px] py-8 gap-[48px]">
+          <section className="flex flex-col gap-[32px] w-full">
+            <div className="flex items-center gap-2">
+              <ShimmerSkeleton className="w-[60px] h-[18px] rounded" />
+              <span className="text-secondary">/</span>
+              <ShimmerSkeleton className="w-[70px] h-[18px] rounded" />
+            </div>
+
+            <div className="flex flex-col lg:flex-row gap-[32px] items-start w-full">
+              {/* Galeria Esquerda */}
+              <div className="flex gap-[28px] items-center shrink-0 w-full lg:w-[573px]">
+                <div className="flex flex-col gap-[16px] shrink-0 w-[100px]">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <ShimmerSkeleton key={`thumb-skel-${i}`} className="size-[100px] rounded-[8px]" />
+                  ))}
+                </div>
+                <div className="relative size-[444px] bg-surface-card rounded-[6px] p-[16px] flex items-center justify-center shrink-0">
+                  <ShimmerSkeleton className="size-[404px] rounded-[24px]" />
+                </div>
+              </div>
+
+              {/* Informações Direita */}
+              <div className="flex-1 flex flex-col justify-between items-start gap-[24px] min-w-0 w-full self-stretch">
+                <div className="flex flex-col gap-[12px] w-full">
+                  <ShimmerSkeleton className="w-3/4 h-[32px] rounded" />
+                  <div className="flex items-center justify-between w-full">
+                    <ShimmerSkeleton className="w-[120px] h-[26px] rounded" />
+                    <ShimmerSkeleton className="w-[100px] h-[20px] rounded" />
+                  </div>
+                </div>
+                <ShimmerSkeleton className="w-full h-[60px] rounded" />
+                <div className="flex flex-col gap-2 w-full">
+                  <ShimmerSkeleton className="w-[60px] h-4 rounded" />
+                  <div className="grid grid-cols-4 gap-2 w-full">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <ShimmerSkeleton key={`ed-skel-${i}`} className="h-[40px] rounded-[6px]" />
+                    ))}
+                  </div>
+                </div>
+                <div className="flex items-center justify-between w-full">
+                  <ShimmerSkeleton className="w-[140px] h-[36px] rounded-[6px]" />
+                  <ShimmerSkeleton className="w-[120px] h-4 rounded" />
+                </div>
+                <div className="flex gap-3 w-full">
+                  <ShimmerSkeleton className="flex-1 h-[44px] rounded-[6px]" />
+                  <ShimmerSkeleton className="size-[44px] rounded-[6px]" />
+                </div>
+              </div>
+            </div>
+
+            {/* Abas de Conteúdo Skeleton */}
+            <div className="flex flex-col gap-6 w-full pt-8 border-t border-border/30">
+              <div className="flex gap-8 border-b border-border/30 pb-3">
+                <ShimmerSkeleton className="w-[120px] h-[24px] rounded" />
+                <ShimmerSkeleton className="w-[200px] h-[24px] rounded" />
+              </div>
+              <ShimmerSkeleton className="w-full max-w-[900px] h-[60px] rounded" />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <ShimmerSkeleton key={`prop-${i}`} className="h-[74px] rounded-[8px]" />
+                ))}
+              </div>
+            </div>
+
+            {/* Colecionadores Também Viram Skeleton */}
+            <div className="flex flex-col gap-6 w-full pt-8">
+              <ShimmerSkeleton className="w-[250px] h-[24px] rounded" />
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 w-full">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <ShimmerSkeleton key={`rel-${i}`} className="h-[250px] rounded-[14px]" />
+                ))}
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     );
@@ -176,6 +267,7 @@ function NftDetailsPage() {
 
             <button
               type="button"
+              data-testid="detail-favorite-btn"
               onClick={handleToggleFavorite}
               className="size-[35px] rounded-full bg-surface-raised border border-border flex items-center justify-center text-text-accent cursor-pointer shadow-md"
               aria-label={nft.isFavorited ? 'Desfavoritar NFT' : 'Favoritar NFT'}
@@ -192,6 +284,14 @@ function NftDetailsPage() {
               className="w-full h-full object-cover rounded-[24px]"
               loading="eager"
             />
+            <button
+              type="button"
+              onClick={() => setIsZoomOpen(true)}
+              className="absolute bottom-3 right-3 text-text-accent bg-ink/70 p-2 rounded-full backdrop-blur-sm hover:brightness-110 cursor-pointer"
+              aria-label="Ampliar imagem do NFT (zoom em alta resolução)"
+            >
+              <ZoomIcon className="size-[20px]" />
+            </button>
           </div>
 
           {/* Dots de Paginação Mobile */}
@@ -301,13 +401,13 @@ function NftDetailsPage() {
           </div>
 
           <div className="flex items-center gap-3 w-full">
-            <button
+            <Button
               type="button"
               onClick={handleAddToCart}
               className="flex-1 h-[56px] rounded-[40px] bg-gradient-to-r from-primary to-primary/80 hover:brightness-110 active:scale-95 text-ink font-mono font-bold text-[16px] flex items-center justify-center shadow-lg transition-all cursor-pointer"
             >
               Comprar NFT
-            </button>
+            </Button>
 
             <Link
               to="/cart"
@@ -387,12 +487,31 @@ function NftDetailsPage() {
                 {/* Ícone de Zoom Lupa no Topo Direito */}
                 <button
                   type="button"
+                  onClick={() => setIsZoomOpen(true)}
                   className="absolute top-4 right-4 text-text-accent hover:brightness-110 cursor-pointer"
-                  aria-label="Ampliar imagem do NFT"
+                  aria-label="Ampliar imagem do NFT (zoom em alta resolução)"
                 >
                   <ZoomIcon className="size-[30px]" />
                 </button>
               </div>
+
+              {/* Modal de Zoom da Imagem (Acessível via Dialog / Escape) */}
+              <Dialog open={isZoomOpen} onOpenChange={setIsZoomOpen}>
+                <DialogContent className="max-w-[600px] bg-surface-card border border-border p-4 flex flex-col items-center gap-4">
+                  <DialogHeader className="w-full">
+                    <DialogTitle className="text-foreground text-lg font-bold">
+                      {nft.title} (Alta Resolução)
+                    </DialogTitle>
+                  </DialogHeader>
+                  <div className="w-full max-h-[70vh] overflow-hidden rounded-[12px] flex items-center justify-center">
+                    <img
+                      src={galleryImages[selectedImageIndex]}
+                      alt={`${nft.title} em alta resolução`}
+                      className="max-h-[70vh] w-auto object-contain rounded-[12px]"
+                    />
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Painel de Informações e Compra à Direita (Figma Node 70342:2763) */}
@@ -491,17 +610,19 @@ function NftDetailsPage() {
 
                 {/* Botões Comprar e Favoritar */}
                 <div className="flex items-center gap-[8px]">
-                  <button
+                  <Button
                     type="button"
                     onClick={handleAddToCart}
                     className="w-[130px] h-[40px] rounded-[6px] bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-bold text-[14px] leading-[20px] flex items-center justify-center transition-all shadow-md cursor-pointer"
                   >
                     COMPRAR
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     type="button"
+                    data-testid="detail-favorite-btn"
                     onClick={handleToggleFavorite}
+                    variant="outline"
                     className={`w-[130px] h-[40px] rounded-[6px] border border-primary flex items-center justify-center gap-[8px] font-mono text-[14px] leading-[20px] transition-all cursor-pointer ${
                       nft.isFavorited
                         ? 'bg-primary/10 text-text-accent font-bold'
@@ -510,7 +631,7 @@ function NftDetailsPage() {
                   >
                     <HeartIcon filled={nft.isFavorited} className="size-[20px]" />
                     <span>Favoritar</span>
-                  </button>
+                  </Button>
                 </div>
               </div>
 

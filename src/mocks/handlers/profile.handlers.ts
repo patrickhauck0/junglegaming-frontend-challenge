@@ -90,7 +90,7 @@ export const profileHandlers = [
       return HttpResponse.json({ error: 'NotFound', message: 'Usuário não encontrado' }, { status: 404 });
     }
 
-    if (currentPassword !== 'kurio123' && user.passwordHash !== 'e10adc3949ba59abbe56e057f20f883e') {
+    if (currentPassword !== 'kurio123') {
       return HttpResponse.json({ error: 'BadRequest', message: 'Senha atual incorreta' }, { status: 400 });
     }
 

@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@/lib/axios';
+import { socketClient } from '@/lib/socket-client';
 import type { User, LoginRequest, RegisterRequest, AuthResponse } from '@/contracts/auth';
 
 const TOKEN_KEY = '__kurio_auth_token__';
@@ -31,13 +32,24 @@ export function useAuth() {
       const response = await apiClient.post<AuthResponse>('/api/auth/login', credentials);
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       localStorage.setItem(TOKEN_KEY, data.token);
       localStorage.setItem(USER_ID_KEY, data.user.id);
       queryClient.setQueryData(['auth', 'session'], data.user);
+
+      // Preserva itens de visitante mesclando com o carrinho do usuário
+      try {
+        await apiClient.post('/api/cart/merge');
+      } catch {
+        // Ignora falha de merge silenciosa
+      }
+
       queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ['quote'] });
       queryClient.invalidateQueries({ queryKey: ['favorites'] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      queryClient.invalidateQueries({ queryKey: ['wallets'] });
     },
   });
 
@@ -46,13 +58,24 @@ export function useAuth() {
       const response = await apiClient.post<AuthResponse>('/api/auth/register', payload);
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       localStorage.setItem(TOKEN_KEY, data.token);
       localStorage.setItem(USER_ID_KEY, data.user.id);
       queryClient.setQueryData(['auth', 'session'], data.user);
+
+      // Preserva itens de visitante mesclando com o carrinho do usuário
+      try {
+        await apiClient.post('/api/cart/merge');
+      } catch {
+        // Ignora falha de merge silenciosa
+      }
+
       queryClient.invalidateQueries({ queryKey: ['cart'] });
+      queryClient.invalidateQueries({ queryKey: ['quote'] });
       queryClient.invalidateQueries({ queryKey: ['favorites'] });
       queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['profile'] });
+      queryClient.invalidateQueries({ queryKey: ['wallets'] });
     },
   });
 
@@ -66,10 +89,10 @@ export function useAuth() {
       }
     },
     onSuccess: () => {
-      queryClient.setQueryData(['auth', 'session'], null);
-      queryClient.invalidateQueries({ queryKey: ['cart'] });
-      queryClient.invalidateQueries({ queryKey: ['favorites'] });
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      // Limpeza estrita de estado privado e reconexão do socket
+      queryClient.clear();
+      socketClient.disconnect();
+      socketClient.connect();
     },
   });
 

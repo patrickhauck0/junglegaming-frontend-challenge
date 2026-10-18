@@ -12,15 +12,11 @@ export interface UpdateProfileRequest {
 export function useProfile() {
   const queryClient = useQueryClient();
 
-  const profileQuery = useQuery<User | null>({
+  const profileQuery = useQuery<User>({
     queryKey: ['profile'],
     queryFn: async () => {
-      try {
-        const response = await apiClient.get<User>('/api/profile');
-        return response.data;
-      } catch {
-        return null;
-      }
+      const response = await apiClient.get<User>('/api/profile');
+      return response.data;
     },
     staleTime: 1000 * 60 * 5,
     retry: false,
@@ -52,8 +48,11 @@ export function useProfile() {
   });
 
   return {
-    profile: profileQuery.data,
+    profile: profileQuery.data ?? null,
     isLoading: profileQuery.isLoading,
+    isError: profileQuery.isError,
+    error: profileQuery.error,
+    refetch: profileQuery.refetch,
     updateProfile: updateProfileMutation.mutateAsync,
     isUpdating: updateProfileMutation.isPending,
     updateError: updateProfileMutation.error,

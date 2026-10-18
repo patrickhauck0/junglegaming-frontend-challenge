@@ -13,6 +13,25 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    target: 'esnext',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'tanstack-vendor': ['@tanstack/react-router', '@tanstack/react-query'],
+          'ui-vendor': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-slider',
+            '@radix-ui/react-checkbox',
+            '@radix-ui/react-select',
+            'lucide-react',
+          ],
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     host: true,

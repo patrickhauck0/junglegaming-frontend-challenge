@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate, redirect } from '@tanstack/react-router';
 import { useAuth } from '@/hooks/useAuth';
 import { useProfile } from '@/hooks/useProfile';
 import {
@@ -19,13 +19,30 @@ import {
 import { Button } from '@/components/ui';
 
 export const Route = createFileRoute('/profile')({
+  beforeLoad: ({ location }) => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('__kurio_auth_token__') : null;
+    if (!token) {
+      throw redirect({
+        to: '/login',
+        search: { redirect: location.href },
+      });
+    }
+  },
   component: ProfilePage,
 });
 
 function ProfilePage() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const { profile, updateProfile, isUpdating, changePassword, isChangingPassword } = useProfile();
+  const {
+    profile,
+    updateProfile,
+    isUpdating,
+    changePassword,
+    isChangingPassword,
+    isError,
+    refetch,
+  } = useProfile();
 
   // Form states
   const [displayName, setDisplayName] = useState('');
@@ -147,6 +164,36 @@ function ProfilePage() {
   const handleRemoveAvatar = () => {
     setAvatarUrl('');
   };
+
+  if (isError) {
+    return (
+      <div className="min-h-screen bg-[#140D0A] flex flex-col items-center justify-center p-4 text-center font-mono">
+        <div className="w-full max-w-md bg-[#241612] border border-red-700/50 rounded-[8px] p-8 shadow-2xl flex flex-col items-center gap-4">
+          <p className="text-lg font-bold text-red-300">Erro ao carregar perfil</p>
+          <p className="text-sm text-[#CFB28C]">
+            Não foi possível recuperar os dados do seu perfil de colecionador.
+          </p>
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              onClick={() => refetch()}
+              className="bg-[#D28A4C] hover:bg-[#E89B55] text-[#140D0A] font-bold"
+            >
+              Tentar novamente
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => navigate({ to: '/' })}
+              className="border-[#D28A4C] text-[#E89B55]"
+            >
+              Voltar ao início
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

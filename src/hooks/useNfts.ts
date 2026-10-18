@@ -45,9 +45,11 @@ export function useToggleFavorite() {
     },
     onMutate: async ({ nftId, isFavorited }) => {
       await queryClient.cancelQueries({ queryKey: ['nfts'] });
+      await queryClient.cancelQueries({ queryKey: ['nft', nftId] });
 
       // Snapshot prévio do cache para rollback
       const previousNfts = queryClient.getQueriesData({ queryKey: ['nfts'] });
+      const previousNft = queryClient.getQueryData<Nft>(['nft', nftId]);
 
       queryClient.setQueriesData({ queryKey: ['nfts'] }, (oldData: any) => {
         if (!oldData || !oldData.data) return oldData;
@@ -66,14 +68,26 @@ export function useToggleFavorite() {
         };
       });
 
-      return { previousNfts };
+      queryClient.setQueryData<Nft>(['nft', nftId], (old) => {
+        if (!old) return old;
+        return {
+          ...old,
+          isFavorited: !isFavorited,
+          likesCount: isFavorited ? Math.max(0, old.likesCount - 1) : old.likesCount + 1,
+        };
+      });
+
+      return { previousNfts, previousNft };
     },
-    onError: (_err, _variables, context) => {
+    onError: (_err, { nftId }, context) => {
       // Rollback imediato no cache
       if (context?.previousNfts) {
         context.previousNfts.forEach(([queryKey, data]) => {
           queryClient.setQueryData(queryKey, data);
         });
+      }
+      if (context?.previousNft) {
+        queryClient.setQueryData(['nft', nftId], context.previousNft);
       }
 
       // Anúncio acessível de erro na região aria-live
@@ -82,9 +96,12 @@ export function useToggleFavorite() {
         announcementEl.textContent = 'Erro ao atualizar favoritos. Ação revertida.';
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['nfts'] });
-      queryClient.invalidateQueries({ queryKey: ['favorites'] });
+    onSettled: (_data, error, { nftId }) => {
+      if (!error) {
+        queryClient.invalidateQueries({ queryKey: ['nfts'] });
+        queryClient.invalidateQueries({ queryKey: ['nft', nftId] });
+        queryClient.invalidateQueries({ queryKey: ['favorites'] });
+      }
     },
   });
 }
@@ -103,5 +120,16 @@ export function useNft(id: string) {
       if (error?.response?.status === 404) return false;
       return failureCount < 2;
     },
+  });
+}
+
+export function useFavorites() {
+  return useQuery({
+    queryKey: ['favorites'],
+    queryFn: async ({ signal }) => {
+      const response = await apiClient.get<{ data: Nft[] }>('/api/favorites', { signal });
+      return response.data.data;
+    },
+    staleTime: 1000 * 30,
   });
 }

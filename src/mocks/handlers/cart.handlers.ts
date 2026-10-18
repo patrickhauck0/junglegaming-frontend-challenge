@@ -202,10 +202,21 @@ export const cartHandlers = [
       return HttpResponse.json({ error: 'Unauthorized', message: 'Usuário inválido' }, { status: 401 });
     }
 
-    const body = (await request.json()) as { guestItems?: CartItem[] };
-    const { guestItems = [] } = body;
+    let guestItems: CartItem[] = [];
+    try {
+      const body = (await request.json()) as { guestItems?: CartItem[] };
+      if (body?.guestItems && Array.isArray(body.guestItems)) {
+        guestItems = body.guestItems;
+      }
+    } catch {
+      // Ignora se não houver body
+    }
 
     const db = getDb();
+    if (guestItems.length === 0 && db.carts['guest']) {
+      guestItems = db.carts['guest'];
+    }
+
     if (!db.carts[userId]) {
       db.carts[userId] = [];
     }
@@ -242,6 +253,58 @@ export const cartHandlers = [
       totalItems,
       subtotalEth,
       updatedAt: new Date().toISOString(),
+    });
+  }),
+
+  http.post('/api/cart/coupon', async ({ request }) => {
+    const scenario = getScenarioConfig();
+    await delay(scenario.latencyMs);
+
+    let code = '';
+    try {
+      const body = (await request.json()) as { code?: string };
+      code = body?.code || '';
+    } catch {
+      return HttpResponse.json({ error: 'BadRequest', message: 'Payload inválido' }, { status: 400 });
+    }
+
+    if (!code.trim()) {
+      return HttpResponse.json({ error: 'ValidationError', message: 'Informe o código do cupom.' }, { status: 400 });
+    }
+
+    const clean = code.trim().toUpperCase();
+    const db = getDb();
+    const coupon = db.coupons.find((c) => c.code.toUpperCase() === clean);
+
+    if (!coupon) {
+      return HttpResponse.json(
+        { error: 'CouponNotFound', message: 'Código promocional inexistente ou inválido.' },
+        { status: 400 }
+      );
+    }
+
+    if (coupon.isExpired || !coupon.isValid) {
+      return HttpResponse.json(
+        { error: 'CouponExpired', message: 'Este código promocional expirou.' },
+        { status: 400 }
+      );
+    }
+
+    return HttpResponse.json({
+      success: true,
+      coupon: {
+        code: coupon.code,
+        discountPercent: coupon.discountPercent,
+        description: coupon.description,
+      },
+      message: `${coupon.discountPercent}% de desconto aplicado com sucesso!`,
+    });
+  }),
+
+  http.delete('/api/cart/coupon', async () => {
+    return HttpResponse.json({
+      success: true,
+      message: 'Cupom removido com sucesso.',
     });
   }),
 ];

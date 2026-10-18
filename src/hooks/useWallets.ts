@@ -8,12 +8,8 @@ export function useWallets() {
   const walletsQuery = useQuery<Wallet[]>({
     queryKey: ['wallets'],
     queryFn: async () => {
-      try {
-        const response = await apiClient.get<{ data: Wallet[] }>('/api/wallets');
-        return response.data.data;
-      } catch {
-        return [];
-      }
+      const response = await apiClient.get<{ data: Wallet[] }>('/api/wallets');
+      return response.data.data;
     },
     staleTime: 1000 * 60 * 5,
     retry: false,
@@ -46,6 +42,9 @@ export function useWallets() {
   return {
     wallets: walletsQuery.data ?? [],
     isLoading: walletsQuery.isLoading,
+    isError: walletsQuery.isError,
+    error: walletsQuery.error,
+    refetch: walletsQuery.refetch,
     createWallet: createWalletMutation.mutateAsync,
     isCreating: createWalletMutation.isPending,
     createError: createWalletMutation.error,

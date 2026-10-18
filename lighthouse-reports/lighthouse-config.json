@@ -1,0 +1,68 @@
+{
+  "version": "1.0.0",
+  "environment": {
+    "node": "v26.5.0",
+    "platform": "win32",
+    "arch": "x64",
+    "tool": "lighthouse@12.x"
+  },
+  "targets": [
+    {
+      "name": "Início",
+      "key": "home",
+      "url": "http://127.0.0.1:4173/"
+    },
+    {
+      "name": "Detalhes do NFT",
+      "key": "nft-details",
+      "url": "http://127.0.0.1:4173/nfts/nft_01"
+    }
+  ],
+  "profiles": {
+    "desktop": {
+      "name": "Desktop (1440x900)",
+      "formFactor": "desktop",
+      "screenEmulation": {
+        "mobile": false,
+        "width": 1440,
+        "height": 900,
+        "deviceScaleFactor": 1,
+        "disabled": false
+      },
+      "throttling": {
+        "rttMs": 40,
+        "throughputKbps": 10240,
+        "cpuSlowdownMultiplier": 1,
+        "requestLatencyMs": 0,
+        "downloadThroughputKbps": 0,
+        "uploadThroughputKbps": 0
+      }
+    },
+    "mobile": {
+      "name": "Mobile (390x844)",
+      "formFactor": "mobile",
+      "screenEmulation": {
+        "mobile": true,
+        "width": 390,
+        "height": 844,
+        "deviceScaleFactor": 2.625,
+        "disabled": false
+      },
+      "throttling": {
+        "rttMs": 100,
+        "throughputKbps": 3072,
+        "requestLatencyMs": 0,
+        "downloadThroughputKbps": 0,
+        "uploadThroughputKbps": 0,
+        "cpuSlowdownMultiplier": 1.5
+      }
+    }
+  },
+  "thresholds": {
+    "performance": 90,
+    "accessibility": 95,
+    "bestPractices": 95,
+    "seo": 90
+  },
+  "runsPerTarget": 3
+}

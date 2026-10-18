@@ -6,12 +6,9 @@ import type { Order, OrderItemSnapshot } from '@/contracts/order';
 
 function extractUserId(request: Request): string | null {
   const auth = request.headers.get('Authorization');
-  if (auth) {
-    const match = auth.match(/token_(user_[^_\s]+)/);
-    if (match?.[1]) return match[1];
-  }
-  const guestHeader = request.headers.get('X-Guest-Id');
-  return guestHeader || 'user_1';
+  if (!auth) return null;
+  const match = auth.match(/token_(user_[^_\s]+)/);
+  return match ? match[1] ?? null : null;
 }
 
 export const orderHandlers = [
@@ -117,6 +114,7 @@ export const orderHandlers = [
     const subtotalAfterDiscount = subtractEth(subtotalEth, discountEth);
     const totalEth = addEth(subtotalAfterDiscount, gasFeeEth);
 
+    const isPending = scenario.paymentMode === 'pending';
     const isDeclined = scenario.paymentMode === 'declined';
     const orderId = `order_${Date.now()}`;
     const txHash = `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join('')}`;
@@ -124,7 +122,7 @@ export const orderHandlers = [
     const newOrder: Order = {
       id: orderId,
       userId,
-      status: isDeclined ? 'declined' : 'confirmed',
+      status: isPending ? 'pending' : (isDeclined ? 'declined' : 'confirmed'),
       items: snapshots,
       subtotalEth,
       discountEth,
@@ -136,7 +134,7 @@ export const orderHandlers = [
       transactionHash: txHash,
       idempotencyKey,
       createdAt: new Date().toISOString(),
-      confirmedAt: isDeclined ? undefined : new Date().toISOString(),
+      confirmedAt: (isDeclined || isPending) ? undefined : new Date().toISOString(),
       declinedReason: isDeclined ? 'Pagamento recusado pela carteira do colecionador' : undefined,
     };
 
@@ -165,7 +163,7 @@ export const orderHandlers = [
 
     saveDb(db);
 
-    return HttpResponse.json(newOrder, { status: isDeclined ? 400 : 201 });
+    return HttpResponse.json(newOrder, { status: 201 });
   }),
 
   http.get('/api/orders', async ({ request }) => {
@@ -193,9 +191,16 @@ export const orderHandlers = [
     }
 
     const db = getDb();
-    const order = db.orders.find((o) => o.id === id && (o.userId === userId || userId === 'user_1' || o.id === 'order_demo' || !o.userId));
+    const order = db.orders.find((o) => o.id === id);
     if (!order) {
       return HttpResponse.json({ error: 'NotFound', message: 'Pedido não encontrado' }, { status: 404 });
+    }
+
+    if (order.userId !== userId) {
+      return HttpResponse.json(
+        { error: 'Forbidden', message: 'Acesso negado a este recibo de compra' },
+        { status: 403 }
+      );
     }
 
     return HttpResponse.json(order);

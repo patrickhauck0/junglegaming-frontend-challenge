@@ -1,10 +1,23 @@
-import { useState } from 'react';
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { useState, useEffect } from 'react';
+import { createFileRoute, Link, useNavigate, redirect } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useOrder } from '@/hooks/useOrder';
 import { multiplyEthByQuantity } from '@/utils/eth-math';
 import { ThankYouIcon, CloseModalIcon } from '@/components/ui/icons';
+import { Button } from '@/components/ui';
+import { socketClient } from '@/lib/socket-client';
+import type { OrderUpdatedEvent } from '@/contracts/socket';
 
 export const Route = createFileRoute('/orders/$id')({
+  beforeLoad: ({ location }) => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('__kurio_auth_token__') : null;
+    if (!token) {
+      throw redirect({
+        to: '/login',
+        search: { redirect: location.href },
+      });
+    }
+  },
   component: OrderConfirmationPage,
 });
 
@@ -44,11 +57,23 @@ function formatTokenId(nftId: string, title?: string): string {
 function OrderConfirmationPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const { data: order, isLoading, error } = useOrder(id);
+  const queryClient = useQueryClient();
+  const { data: order, isLoading, error, refetch } = useOrder(id);
   const [explorerFeedback, setExplorerFeedback] = useState(false);
 
-  // Fallback demo order snapshot when id is demo or during offline preview
-  const isDemo = id === 'order_demo' || id === 'demo';
+  // Escuta WebSocket em tempo real para atualização de status do pedido
+  useEffect(() => {
+    const socket = socketClient.getSocket() || socketClient.connect();
+    const handleOrderUpdated = (evt: OrderUpdatedEvent) => {
+      if (evt.resourceId === id || evt.payload?.id === id) {
+        queryClient.invalidateQueries({ queryKey: ['order', id] });
+      }
+    };
+    socket.on('order.updated', handleOrderUpdated);
+    return () => {
+      socket.off('order.updated', handleOrderUpdated);
+    };
+  }, [id, queryClient]);
 
   if (isLoading) {
     return (
@@ -80,7 +105,7 @@ function OrderConfirmationPage() {
     );
   }
 
-  if (error || (!order && !isDemo)) {
+  if (error || !order) {
     return (
       <div className="min-h-screen bg-[#140D0A] flex flex-col items-center justify-center p-4 text-center">
         <div className="w-full max-w-[578px] bg-[#241612] border border-[#3F2319] rounded-[8px] p-8 shadow-2xl">
@@ -104,15 +129,49 @@ function OrderConfirmationPage() {
     );
   }
 
-  // Se o pedido foi recusado pelo gateway/carteira
-  if (order?.status === 'declined') {
+  // Estado 1: Transação pendente na rede blockchain
+  if (order.status === 'pending') {
     return (
-      <div className="min-h-screen bg-[#140D0A] flex flex-col items-center justify-center p-4 text-center">
+      <div className="min-h-screen bg-[#140D0A] flex flex-col items-center justify-center p-4 text-center font-mono">
+        <div className="w-full max-w-[578px] bg-[#241612] border border-[#D28A4C]/60 rounded-[8px] p-8 shadow-2xl flex flex-col items-center gap-4">
+          <div className="size-16 rounded-full border-4 border-[#D28A4C] border-t-transparent animate-spin my-2" />
+          <h1 className="text-xl font-bold text-[#F5F1EB]">
+            Processando transação na blockchain...
+          </h1>
+          <p className="text-sm text-[#CFB28C] leading-relaxed max-w-[440px]">
+            Aguardando confirmação dos blocos na rede. Este recibo será atualizado automaticamente em tempo real via WebSocket assim que o status mudar para confirmado.
+          </p>
+          <div className="flex gap-3 mt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => refetch()}
+              className="border-[#D28A4C] text-[#E89B55] hover:bg-[#D28A4C]/10"
+            >
+              Verificar agora
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => navigate({ to: '/' })}
+            >
+              Voltar ao catálogo
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Estado 2: Pedido recusado pelo gateway/carteira
+  if (order.status === 'declined') {
+    return (
+      <div className="min-h-screen bg-[#140D0A] flex flex-col items-center justify-center p-4 text-center font-mono">
         <div className="w-full max-w-[578px] bg-[#241612] border border-[#F0805F] rounded-[8px] p-8 shadow-2xl">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#381F1A] border border-[#F0805F] flex items-center justify-center text-[#F0805F] text-2xl font-bold">
             ✕
           </div>
-          <h1 className="text-xl font-bold text-[#F5F1EB] mb-2 font-mono">
+          <h1 className="text-xl font-bold text-[#F5F1EB] mb-2">
             Pagamento recusado
           </h1>
           <p className="text-sm text-[#CFB28C] mb-6 leading-relaxed">
@@ -382,7 +441,7 @@ function OrderConfirmationPage() {
               Transação confirmada na Ethereum. A propriedade foi transferida para sua carteira conectada e registrada na rede.
             </p>
 
-            <button
+            <Button
               type="button"
               onClick={() => setExplorerFeedback(true)}
               className="bg-[#D28A4C] hover:bg-[#E89B55] text-[#140D0A] font-mono font-bold text-[16px] leading-[16px] px-[24px] py-[16px] rounded-[5px] cursor-pointer transition-colors"
@@ -390,7 +449,7 @@ function OrderConfirmationPage() {
               data-name="Etherscan Button"
             >
               Ver no Etherscan
-            </button>
+            </Button>
 
             {explorerFeedback && (
               <p

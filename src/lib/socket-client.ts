@@ -25,7 +25,7 @@ class RealtimeSocketClient {
     }
 
     this.socket = io(targetUrl, {
-      transports: ['websocket', 'polling'],
+      transports: ['websocket'],
       autoConnect: true,
       reconnection: true,
       reconnectionAttempts: 10,
@@ -113,3 +113,6 @@ class RealtimeSocketClient {
 }
 
 export const socketClient = new RealtimeSocketClient();
+if (typeof window !== 'undefined') {
+  (window as any).__KURIO_SOCKET_CLIENT__ = socketClient;
+}

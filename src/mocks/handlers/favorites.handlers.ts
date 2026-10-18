@@ -14,6 +14,10 @@ export const favoritesHandlers = [
     const scenario = getScenarioConfig();
     await delay(scenario.latencyMs);
 
+    if (scenario.errorMode === '500') {
+      return HttpResponse.json({ error: 'InternalServerError', message: 'Falha interna simulada' }, { status: 500 });
+    }
+
     const userId = extractUserId(request);
     if (!userId) {
       return HttpResponse.json({ error: 'Unauthorized', message: 'Faça login para ver favoritos' }, { status: 401 });

@@ -1,9 +1,13 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, useMemo, type FormEvent } from 'react';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCart, useUpdateCartItem, useRemoveCartItem } from '@/hooks/useCart';
 import { TrashIcon, ArrowLeftIcon } from '@/components/ui/icons';
-import { Button } from '@/components/ui';
+import { Button, Input } from '@/components/ui';
 import { addEth, subtractEth, multiplyEthByQuantity, applyDiscountPercent } from '@/utils/eth-math';
+import { apiClient } from '@/lib/axios';
+import { socketClient } from '@/lib/socket-client';
+import type { NftUpdatedEvent } from '@/contracts/socket';
 
 export const Route = createFileRoute('/cart')({
   component: CartPage,
@@ -46,15 +50,63 @@ const GAS_FEE_ETH = '0.016';
 
 function CartPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { data: cart, isLoading } = useCart();
   const updateMutation = useUpdateCartItem();
   const removeMutation = useRemoveCartItem();
 
   const [couponCode, setCouponCode] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; percent: number } | null>(null);
-  const [couponFeedback, setCouponFeedback] = useState<{ message: string; isError: boolean } | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; percent: number } | null>(() => {
+    try {
+      const saved = typeof window !== 'undefined' ? sessionStorage.getItem('__kurio_applied_coupon__') : null;
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+  const [couponFeedback, setCouponFeedback] = useState<{ message: string; isError: boolean } | null>(() => {
+    try {
+      const saved = typeof window !== 'undefined' ? sessionStorage.getItem('__kurio_applied_coupon__') : null;
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return { message: `${parsed.percent}% de desconto aplicado com sucesso!`, isError: false };
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  });
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  const [priceNotice, setPriceNotice] = useState<string | null>(null);
 
-  const items = cart?.items || [];
+  useEffect(() => {
+    if (appliedCoupon) {
+      sessionStorage.setItem('__kurio_applied_coupon__', JSON.stringify(appliedCoupon));
+    } else {
+      sessionStorage.removeItem('__kurio_applied_coupon__');
+    }
+  }, [appliedCoupon]);
+
+  const items = useMemo(() => cart?.items || [], [cart?.items]);
+
+  // Escuta WebSocket em tempo real para alteração de cotação dos NFTs no carrinho
+  useEffect(() => {
+    const socket = socketClient.getSocket() || socketClient.connect();
+    const handleNftUpdated = (evt: NftUpdatedEvent) => {
+      const affected = items.find((i) => i.nftId === evt.resourceId || i.nftId === evt.payload?.id);
+      if (affected) {
+        setPriceNotice(
+          `O item "${affected.nft?.title || affected.nftId}" teve o preço atualizado na rede. Atualizando carrinho...`
+        );
+        queryClient.invalidateQueries({ queryKey: ['cart'] });
+      }
+    };
+
+    socket.on('nft.updated', handleNftUpdated);
+    return () => {
+      socket.off('nft.updated', handleNftUpdated);
+    };
+  }, [items, queryClient]);
 
   const subtotalEth = items.reduce((acc, item) => {
     const itemTotal = multiplyEthByQuantity(item.priceEth, item.quantity);
@@ -70,7 +122,7 @@ function CartPage() {
   const subtotalAfterDiscount = subtractEth(subtotalEth, discountEth);
   const totalEth = items.length > 0 ? addEth(subtotalAfterDiscount, GAS_FEE_ETH) : '0.00';
 
-  const handleApplyCoupon = (e: FormEvent) => {
+  const handleApplyCoupon = async (e: FormEvent) => {
     e.preventDefault();
     const clean = couponCode.trim().toUpperCase();
     if (!clean) {
@@ -78,15 +130,26 @@ function CartPage() {
       return;
     }
 
-    if (clean === 'KURIO10') {
-      setAppliedCoupon({ code: clean, percent: 10 });
-      setCouponFeedback({ message: '10% de desconto aplicado com sucesso!', isError: false });
-    } else if (clean === 'GREENMINT20') {
-      setAppliedCoupon({ code: clean, percent: 20 });
-      setCouponFeedback({ message: '20% de desconto promocional aplicado!', isError: false });
-    } else {
+    setIsApplyingCoupon(true);
+    setCouponFeedback(null);
+    try {
+      const res = await apiClient.post('/api/cart/coupon', { code: clean });
+      const data = res.data;
+      const discountPercent = data.coupon?.discountPercent ?? data.discountPercent ?? 10;
+      setAppliedCoupon({ code: clean, percent: discountPercent });
+      setCouponFeedback({
+        message: `${discountPercent}% de desconto aplicado com sucesso!`,
+        isError: false,
+      });
+    } catch (err: unknown) {
+      const errObj = err as { response?: { data?: { message?: string } } };
       setAppliedCoupon(null);
-      setCouponFeedback({ message: 'Código promocional inválido ou expirado.', isError: true });
+      setCouponFeedback({
+        message: errObj.response?.data?.message || 'Código promocional inválido ou expirado.',
+        isError: true,
+      });
+    } finally {
+      setIsApplyingCoupon(false);
     }
   };
 
@@ -127,6 +190,24 @@ function CartPage() {
           </p>
         </nav>
 
+        {/* Alerta de alteração de preço em tempo real */}
+        {priceNotice && (
+          <div className="p-3.5 bg-amber-950/60 border border-amber-500/70 rounded-[4px] text-amber-200 text-[13px] flex items-center justify-between gap-3 mb-6">
+            <p className="flex items-center gap-2">
+              <span>⚡</span>
+              <span>{priceNotice}</span>
+            </p>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setPriceNotice(null)}
+              className="text-amber-300 hover:text-amber-100 text-[12px] h-7 px-2"
+            >
+              Fechar
+            </Button>
+          </div>
+        )}
+
         {/* Cart Body: Cart Table (782px) + Wallet Summary (332px) */}
         <div className="flex flex-col lg:flex-row items-start justify-between gap-10 lg:gap-[86px] w-full">
           {/* Cart Table Container */}
@@ -153,8 +234,25 @@ function CartPage() {
 
             {/* Cart Items List */}
             {isLoading ? (
-              <div className="py-12 text-center text-text-secondary text-[15px]">
-                Carregando itens do carrinho...
+              <div className="flex flex-col gap-3 w-full" role="status" aria-label="Carregando itens do carrinho">
+                {[1, 2, 3].map((n) => (
+                  <div
+                    key={n}
+                    className="bg-surface-card h-[70px] rounded-[6px] pr-6 pl-2 flex items-center justify-between w-full animate-pulse"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="size-[62px] rounded-[6px] bg-[#3F2319]" />
+                      <div className="flex flex-col gap-2">
+                        <div className="h-4 w-32 bg-[#3F2319] rounded" />
+                        <div className="h-3 w-20 bg-[#3F2319]/70 rounded" />
+                      </div>
+                    </div>
+                    <div className="h-4 w-16 bg-[#3F2319] rounded" />
+                    <div className="h-6 w-16 bg-[#3F2319] rounded-full" />
+                    <div className="h-4 w-20 bg-[#3F2319] rounded" />
+                    <div className="size-5 bg-[#3F2319] rounded" />
+                  </div>
+                ))}
               </div>
             ) : items.length === 0 ? (
               <div className="bg-surface-card rounded-[6px] p-8 text-center my-4">
@@ -279,20 +377,21 @@ function CartPage() {
                 Código promocional
               </label>
               <div className="border border-primary rounded-[3px] flex h-10 items-center pl-2 w-full">
-                <input
+                <Input
                   id="desktop-promo-input"
                   type="text"
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
                   placeholder="Digite o código promocional..."
-                  className="bg-transparent flex-1 text-[12px] font-mono text-foreground placeholder:text-secondary outline-none"
+                  className="bg-transparent flex-1 text-[12px] font-mono text-foreground placeholder:text-secondary border-none outline-none focus:ring-0 shadow-none h-9 px-1"
                 />
-                <button
+                <Button
                   type="submit"
-                  className="bg-primary h-10 w-[102px] rounded-r-[2px] flex items-center justify-center font-mono font-bold text-[15px] text-ink hover:bg-[#E89B55] transition-colors cursor-pointer shrink-0"
+                  disabled={isApplyingCoupon}
+                  className="bg-primary h-10 w-[102px] rounded-r-[2px] rounded-l-none flex items-center justify-center font-mono font-bold text-[15px] text-ink hover:bg-[#E89B55] transition-colors cursor-pointer shrink-0 disabled:opacity-60"
                 >
-                  Aplicar
-                </button>
+                  {isApplyingCoupon ? '...' : 'Aplicar'}
+                </Button>
               </div>
               {couponFeedback && (
                 <p className={`text-[12px] font-mono ${couponFeedback.isError ? 'text-red-400' : 'text-green-400'}`}>
@@ -413,8 +512,20 @@ function CartPage() {
         {/* Mobile Cart Items */}
         <div className="px-4 flex flex-col gap-5 flex-1 pb-6 items-center">
           {isLoading ? (
-            <div className="py-12 text-center text-text-secondary text-[14px]">
-              Carregando carrinho...
+            <div className="w-full max-w-[358px] flex flex-col gap-4 animate-pulse" role="status" aria-label="Carregando itens do carrinho">
+              {[1, 2].map((n) => (
+                <div
+                  key={n}
+                  className="h-[100px] w-full bg-surface-card rounded-[14px] flex items-center shrink-0 pr-4 overflow-hidden"
+                >
+                  <div className="size-[100px] bg-[#3F2319] shrink-0" />
+                  <div className="pl-3 py-3 flex flex-col justify-between h-full flex-1">
+                    <div className="h-4 w-32 bg-[#3F2319] rounded" />
+                    <div className="h-3 w-20 bg-[#3F2319]/70 rounded" />
+                    <div className="h-4 w-24 bg-[#3F2319] rounded" />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : items.length === 0 ? (
             <div className="w-full max-w-[358px] bg-surface-card rounded-[14px] p-6 text-center my-6">
@@ -500,20 +611,21 @@ function CartPage() {
         <div className="bg-surface-card rounded-t-[40px] px-6 pt-6 pb-10 flex flex-col gap-5 w-full mt-auto">
           {/* Promo Input */}
           <form onSubmit={handleApplyCoupon} className="flex flex-col gap-2 w-full">
-            <div className="bg-surface-card border border-border rounded-[40px] drop-shadow-[0px_6px_10px_rgba(10,6,4,0.45)] flex h-[50px] items-center pl-4 w-full">
-              <input
+            <div className="bg-surface-card border border-border rounded-[40px] drop-shadow-[0px_6px_10px_rgba(10,6,4,0.45)] flex h-[50px] items-center pl-4 pr-1 w-full overflow-hidden">
+              <Input
                 type="text"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
                 placeholder="Digite o código promocional..."
-                className="bg-transparent flex-1 font-mono font-normal text-[13px] text-foreground placeholder:text-secondary outline-none"
+                className="bg-transparent flex-1 font-mono font-normal text-[13px] text-foreground placeholder:text-secondary border-none outline-none focus:ring-0 shadow-none h-9 px-1"
               />
-              <button
+              <Button
                 type="submit"
-                className="h-[50px] w-[97px] rounded-[40px] flex items-center justify-center font-mono font-bold text-[15px] text-foreground bg-gradient-to-r from-primary/50 to-primary cursor-pointer shrink-0"
+                disabled={isApplyingCoupon}
+                className="h-[42px] w-[97px] rounded-[40px] flex items-center justify-center font-mono font-bold text-[15px] text-foreground bg-gradient-to-r from-primary/50 to-primary cursor-pointer shrink-0 disabled:opacity-60"
               >
-                Aplicar
-              </button>
+                {isApplyingCoupon ? '...' : 'Aplicar'}
+              </Button>
             </div>
             {couponFeedback && (
               <p className={`text-[12px] font-mono px-2 ${couponFeedback.isError ? 'text-red-400' : 'text-green-400'}`}>
