@@ -38,6 +38,7 @@ test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
+playwright-screenshots/
 
 # Lighthouse reports
 lighthouse-reports/

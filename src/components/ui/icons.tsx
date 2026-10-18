@@ -336,3 +336,86 @@ export function CheckIcon({ className = 'size-4', ...props }: IconProps) {
     </svg>
   );
 }
+
+export function StarIcon({
+  filled = true,
+  className = 'size-4',
+  ...props
+}: IconProps & { filled?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 15 15"
+      fill={filled ? '#D28A4C' : 'none'}
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+    >
+      <path
+        d="M7.5 1.5L9.354 5.256L13.5 5.862L10.5 8.787L11.208 12.918L7.5 10.968L3.792 12.918L4.5 8.787L1.5 5.862L5.646 5.256L7.5 1.5Z"
+        fill={filled ? '#D28A4C' : 'none'}
+        stroke="#D28A4C"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function MinusIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M3.5 8H12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function PlusIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M8 3.5V12.5M3.5 8H12.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ArrowLeftIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M11.25 13.5L6.75 9L11.25 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function ZoomIcon({ className = 'size-5', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <circle cx="14" cy="14" r="8" stroke="#D28A4C" strokeWidth="2" />
+      <path d="M20 20L25 25" stroke="#D28A4C" strokeWidth="2" strokeLinecap="round" />
+      <path d="M14 11V17M11 14H17" stroke="#D28A4C" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function ShareLinkedinIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M4 2C4 2.55 3.55 3 3 3C2.45 3 2 2.55 2 2C2 1.45 2.45 1 3 1C3.55 1 4 1.45 4 2ZM4 5H2V14H4V5ZM8 5H6V14H8V9.5C8 7.5 10.5 7.3 10.5 9.5V14H12.5V8.5C12.5 5.8 9.5 5.9 8 7.3V5Z" fill="#D28A4C" />
+    </svg>
+  );
+}
+
+export function ShareTwitterIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M14.5 4.1C14 4.3 13.5 4.5 13 4.5C13.5 4.2 13.9 3.7 14.1 3.1C13.6 3.4 13 3.6 12.4 3.7C11.9 3.2 11.2 2.9 10.5 2.9C9 2.9 7.8 4.1 7.8 5.6C7.8 5.8 7.8 6 7.9 6.2C5.6 6.1 3.6 5 2.3 3.4C2.1 3.8 2 4.2 2 4.7C2 5.6 2.5 6.5 3.2 7C2.8 7 2.4 6.9 2 6.7V6.7C2 8 2.9 9.1 4.2 9.4C3.9 9.5 3.7 9.5 3.5 9.5C3.3 9.5 3.1 9.5 3 9.4C3.4 10.5 4.4 11.3 5.6 11.3C4.7 12 3.5 12.5 2.2 12.5C2 12.5 1.8 12.5 1.6 12.5C2.8 13.3 4.2 13.7 5.8 13.7C10.8 13.7 13.5 9.5 13.5 5.9V5.5C14.1 5.2 14.6 4.7 15 4.1L14.5 4.1Z" fill="#D28A4C" />
+    </svg>
+  );
+}
+
+export function ShareMailIcon({ className = 'size-4', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M2 3H14C14.55 3 15 3.45 15 4V12C15 12.55 14.55 13 14 13H2C1.45 13 1 12.55 1 12V4C1 3.45 1.45 3 2 3ZM13.8 5L8 9L2.2 5V11.5H13.8V5ZM8 7.8L13.5 4H2.5L8 7.8Z" fill="#D28A4C" />
+    </svg>
+  );
+}

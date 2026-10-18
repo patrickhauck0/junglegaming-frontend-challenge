@@ -88,3 +88,20 @@ export function useToggleFavorite() {
     },
   });
 }
+
+export function useNft(id: string) {
+  return useQuery({
+    queryKey: ['nft', id],
+    queryFn: async ({ signal }) => {
+      const response = await apiClient.get<Nft>(`/api/nfts/${id}`, { signal });
+      return response.data;
+    },
+    enabled: Boolean(id),
+    staleTime: 1000 * 30,
+    retry: (failureCount, error: any) => {
+      // Não retentar em caso de 404
+      if (error?.response?.status === 404) return false;
+      return failureCount < 2;
+    },
+  });
+}

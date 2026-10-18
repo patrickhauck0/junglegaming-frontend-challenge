@@ -96,7 +96,12 @@ export const nftHandlers = [
 
     const { id } = params;
     const db = getDb();
-    const nft = db.nfts.find((item) => item.id === id);
+    const searchId = String(id).toLowerCase();
+    const nft = db.nfts.find(
+      (item) =>
+        item.id.toLowerCase() === searchId ||
+        item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === searchId
+    );
 
     if (!nft) {
       return HttpResponse.json(
