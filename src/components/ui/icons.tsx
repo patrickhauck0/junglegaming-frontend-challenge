@@ -571,3 +571,87 @@ export function EyeShowIcon({ className = 'size-[18px]', ...props }: IconProps) 
   );
 }
 
+export function UserProfileIcon({ className = 'size-[18px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M8.99999 2.65384C7.61037 2.65384 6.48387 3.77313 6.48387 5.15384C6.48387 6.53455 7.61037 7.65384 8.99999 7.65384C10.3896 7.65384 11.5161 6.53455 11.5161 5.15384C11.5161 3.77313 10.3896 2.65384 8.99999 2.65384ZM5.32258 5.15384C5.32258 3.13587 6.96901 1.49999 8.99999 1.49999C11.031 1.49999 12.6774 3.13587 12.6774 5.15384C12.6774 7.1718 11.031 8.80768 8.99999 8.80768C6.96901 8.80768 5.32258 7.1718 5.32258 5.15384Z" fill="currentColor"/>
+      <path d="M7.09963 11.5C5.47683 11.5 4.16129 12.8071 4.16129 14.4195C4.16129 14.5042 4.17686 14.5639 4.19318 14.5987C4.20697 14.6281 4.21879 14.6365 4.22865 14.6418C4.6799 14.8858 5.94511 15.3461 8.99999 15.3461C12.0549 15.3461 13.3201 14.8858 13.7713 14.6418C13.7812 14.6365 13.793 14.6281 13.8068 14.5987C13.8231 14.5639 13.8387 14.5042 13.8387 14.4195C13.8387 12.8071 12.5232 11.5 10.9004 11.5H7.09963ZM3 14.4195C3 12.1698 4.83546 10.3461 7.09963 10.3461H10.9004C13.1645 10.3461 15 12.1698 15 14.4195C15 14.8325 14.8495 15.3725 14.3264 15.6553C13.6335 16.0299 12.1469 16.5 8.99999 16.5C5.8531 16.5 4.36654 16.0299 3.67358 15.6553C3.15047 15.3725 3 14.8325 3 14.4195Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+export function LocationPinIcon({ className = 'size-[20px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 14 17" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M6.8755 5.41683C6.07133 5.41683 5.41716 6.071 5.41716 6.876C5.41716 7.68016 6.07133 8.3335 6.8755 8.3335C7.67967 8.3335 8.33383 7.68016 8.33383 6.876C8.33383 6.071 7.67967 5.41683 6.8755 5.41683M6.8755 9.5835C5.38216 9.5835 4.16716 8.36933 4.16716 6.876C4.16716 5.38183 5.38216 4.16683 6.8755 4.16683C8.36883 4.16683 9.58383 5.38183 9.58383 6.876C9.58383 8.36933 8.36883 9.5835 6.8755 9.5835" fill="currentColor"/>
+      <path d="M6.87466 1.25016C3.773 1.25016 1.24966 3.79766 1.24966 6.92766C1.24966 10.9102 5.93633 14.7902 6.87466 14.9968C7.813 14.7893 12.4997 10.9093 12.4997 6.92766C12.4997 3.79766 9.97633 1.25016 6.87466 1.25016V1.25016ZM6.87466 16.2502C5.37966 16.2502 -0.000335276 11.6235 -0.000335276 6.92766C-0.000335276 3.10766 3.08383 0.00016275 6.87466 0.00016275C10.6655 0.00016275 13.7497 3.10766 13.7497 6.92766C13.7497 11.6235 8.36966 16.2502 6.87466 16.2502V16.2502Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+export function ShoppingBagOutlineIcon({ className = 'size-[18px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M12.8646 15.1873H7.41669C5.0909 15.1873 3.19871 13.2951 3.19871 10.9693V6.64589C3.19871 4.48382 2.12108 2.48256 0.316103 1.29246C-0.00804931 1.07875 -0.0975409 0.642749 0.11617 0.318597C0.329881 -0.00559043 0.765845 -0.0951171 1.09007 0.118664C2.12045 0.798041 2.95638 1.69408 3.55414 2.72573C3.68332 2.87044 4.72495 3.9745 6.43253 3.9745H14.5278C16.7364 3.9332 18.4651 6.14965 17.8877 8.28148L16.9558 11.9958C16.4843 13.8749 14.802 15.1873 12.8646 15.1873V15.1873ZM4.42734 4.98334C4.54421 5.52327 4.6047 6.08001 4.6047 6.64589V10.9693C4.6047 12.5199 5.86616 13.7813 7.41669 13.7813H12.8646C14.1562 13.7813 15.2777 12.9064 15.592 11.6536L16.5239 7.93934C16.8671 6.6726 15.8397 5.356 14.5278 5.3805H6.4325C5.66022 5.3805 4.98801 5.21399 4.42734 4.98334V4.98334ZM7.06519 17.1206C7.06519 16.6352 6.67176 16.2418 6.18645 16.2418C5.02046 16.2882 5.02147 17.9533 6.18645 17.9993C6.67176 17.9993 7.06519 17.6059 7.06519 17.1206ZM14.06 17.1206C14.06 16.6352 13.6666 16.2418 13.1813 16.2418C12.0153 16.2882 12.0163 17.9533 13.1813 17.9993C13.6666 17.9993 14.06 17.6059 14.06 17.1206ZM15.2308 7.48949C15.2308 7.10122 14.9161 6.78649 14.5278 6.78649H6.71369C5.78096 6.82361 5.78166 8.15568 6.71369 8.19249H14.5278C14.9161 8.19249 15.2308 7.87775 15.2308 7.48949Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+export function ActivityCurveIcon({ className = 'size-[18px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M4.1007 10.1279L6.34545 7.21118L8.90595 9.22118L11.1027 6.38618" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M13.6632 0.75C14.4597 0.75 15.1047 1.395 15.1047 2.1915C15.1047 2.98725 14.4597 3.633 13.6632 3.633C12.8667 3.633 12.2217 2.98725 12.2217 2.1915C12.2217 1.395 12.8667 0.75 13.6632 0.75Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M14.4795 5.93925C14.5792 6.6105 14.625 7.3665 14.625 8.21475C14.625 13.4183 12.891 15.1522 7.6875 15.1522C2.48475 15.1522 0.75 13.4183 0.75 8.21475C0.75 3.012 2.48475 1.27725 7.6875 1.27725C8.52 1.27725 9.26325 1.3215 9.92475 1.4175" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+export function DownloadOutlineIcon({ className = 'size-[18px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M7.5966 9.78075V0.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M9.7836 7.58565L7.5966 9.78165L5.4096 7.58565" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M10.965 4.13153C13.6492 4.37903 14.625 5.38403 14.625 9.38153C14.625 14.7065 12.8918 14.7065 7.6875 14.7065C2.48175 14.7065 0.75 14.7065 0.75 9.38153C0.75 5.38403 1.725 4.37903 4.41 4.13153" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+export function DangerTriangleOutlineIcon({ className = 'size-[18px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M7.87495 14.25C3.00414 14.25 1.09245 13.904 0.782598 12.1525C0.472745 10.401 2.45532 7.10806 3.06627 6.02135C5.10938 2.38806 6.49774 0.75 7.87495 0.75C9.25216 0.75 10.6405 2.38806 12.6836 6.02135C13.2946 7.10806 15.2772 10.401 14.9673 12.1525C14.6583 13.904 12.7458 14.25 7.87495 14.25Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M7.87495 4.875V7.79625" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M7.87173 10.4213H7.87848" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+export function LogoutOutlineIcon({ className = 'size-[20px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M17.0268 8.559H6.99267" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M14.5879 6.129L17.0279 8.559L14.5879 10.989" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M12.5008 4.81667C12.2258 1.83333 11.1092 0.75 6.6675 0.75C0.75 0.75 0.75 2.675 0.75 8.45833C0.75 14.2417 0.75 16.1667 6.6675 16.1667C11.1092 16.1667 12.2258 15.0833 12.5008 12.1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+export function ImagePlaceholderIcon({ className = 'size-[20px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M0.75 10C0.75 16.937 3.063 19.25 10 19.25C16.937 19.25 19.25 16.937 19.25 10C19.25 3.063 16.937 0.75 10 0.75C3.063 0.75 0.75 3.063 0.75 10Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M8.5986 6.7841C8.5986 7.7571 7.8106 8.5451 6.8376 8.5451C5.8656 8.5451 5.0766 7.7571 5.0766 6.7841C5.0766 5.8111 5.8656 5.0231 6.8376 5.0231C7.8106 5.0231 8.5986 5.8111 8.5986 6.7841Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M19.1201 12.6665C18.2391 11.7605 16.9931 9.9295 14.7041 9.9295C12.4151 9.9295 12.3651 13.9675 10.0291 13.9675C7.6921 13.9675 6.7511 12.5965 5.2281 13.3125C3.7061 14.0275 2.4661 16.8735 2.4661 16.8735" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+export function ChevronDownOutlineIcon({ className = 'size-[20px]', ...props }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} {...props}>
+      <path d="M15.4419 7.89139C15.686 8.13547 15.686 8.5312 15.4419 8.77527L10.4419 13.7753C10.1979 14.0194 9.80214 14.0194 9.55806 13.7753L4.55806 8.77527C4.31398 8.5312 4.31398 8.13547 4.55806 7.89139C4.80214 7.64731 5.19786 7.64731 5.44194 7.89139L10 12.4494L14.5581 7.89139C14.8021 7.64731 15.1979 7.64731 15.4419 7.89139Z" fill="currentColor"/>
+    </svg>
+  );
+}
+

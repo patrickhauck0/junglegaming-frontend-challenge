@@ -67,6 +67,14 @@ test.describe('Visual Audit - Home and NFT Details', () => {
         path: path.join(outputDir, 'desktop-register.png'),
         fullPage: true,
       });
+
+      // 8. Perfil do Colecionador Desktop
+      await page.goto('/profile', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'desktop-profile.png'),
+        fullPage: true,
+      });
     }
 
     if (testInfo.project.name === 'Mobile Chromium') {
@@ -125,6 +133,14 @@ test.describe('Visual Audit - Home and NFT Details', () => {
       await page.waitForTimeout(1500);
       await page.screenshot({
         path: path.join(outputDir, 'mobile-register.png'),
+        fullPage: true,
+      });
+
+      // 8. Perfil do Colecionador Mobile
+      await page.goto('/profile', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'mobile-profile.png'),
         fullPage: true,
       });
     }
