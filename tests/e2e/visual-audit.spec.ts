@@ -75,6 +75,14 @@ test.describe('Visual Audit - Home and NFT Details', () => {
         path: path.join(outputDir, 'desktop-profile.png'),
         fullPage: true,
       });
+
+      // 9. Carteiras Desktop
+      await page.goto('/wallets', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'desktop-wallets.png'),
+        fullPage: true,
+      });
     }
 
     if (testInfo.project.name === 'Mobile Chromium') {
@@ -141,6 +149,14 @@ test.describe('Visual Audit - Home and NFT Details', () => {
       await page.waitForTimeout(1500);
       await page.screenshot({
         path: path.join(outputDir, 'mobile-profile.png'),
+        fullPage: true,
+      });
+
+      // 9. Carteiras Mobile
+      await page.goto('/wallets', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'mobile-wallets.png'),
         fullPage: true,
       });
     }
