@@ -43,6 +43,14 @@ test.describe('Visual Audit - Home and NFT Details', () => {
         path: path.join(outputDir, 'desktop-payment.png'),
         fullPage: true,
       });
+
+      // 5. Confirmação de Pedido Desktop
+      await page.goto('/orders/order_demo', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'desktop-order-confirmation.png'),
+        fullPage: true,
+      });
     }
 
     if (testInfo.project.name === 'Mobile Chromium') {
@@ -77,6 +85,14 @@ test.describe('Visual Audit - Home and NFT Details', () => {
       await page.waitForTimeout(1500);
       await page.screenshot({
         path: path.join(outputDir, 'mobile-payment.png'),
+        fullPage: true,
+      });
+
+      // 5. Confirmação de Pedido Mobile
+      await page.goto('/orders/order_demo', { waitUntil: 'networkidle' });
+      await page.waitForTimeout(1500);
+      await page.screenshot({
+        path: path.join(outputDir, 'mobile-order-confirmation.png'),
         fullPage: true,
       });
     }

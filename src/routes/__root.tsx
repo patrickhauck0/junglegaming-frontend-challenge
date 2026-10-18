@@ -24,8 +24,9 @@ function RootComponent() {
   const isNftDetails = pathname.startsWith('/nfts/');
   const isCart = pathname === '/cart';
   const isPayment = pathname === '/payment';
-  const hideMobileNav = isNftDetails || isCart || isPayment;
-  const activeHeaderItem = isNftDetails || isCart || isPayment ? 'market' : 'home';
+  const isOrders = pathname.startsWith('/orders');
+  const hideMobileNav = isNftDetails || isCart || isPayment || isOrders;
+  const activeHeaderItem = isNftDetails || isCart || isPayment || isOrders ? 'market' : 'home';
 
   return (
     <div className="min-h-screen flex flex-col bg-ink text-foreground font-mono selection:bg-primary/25 selection:text-foreground">

@@ -331,22 +331,69 @@ const INITIAL_COUPONS: Coupon[] = [
 
 const STORAGE_KEY = '__kurio_msw_db__';
 
+const INITIAL_ORDER_DEMO: Order = {
+  id: 'order_demo',
+  userId: 'user_1',
+  status: 'confirmed',
+  items: [
+    {
+      nftId: 'nft_01',
+      title: 'Emerald Ape #042',
+      imageUrl: '/assets/nfts/emerald-ape.webp',
+      quantity: 2,
+      priceEth: '1.19',
+      edition: '01/10',
+    },
+    {
+      nftId: 'nft_02',
+      title: 'Violet Nomad #314',
+      imageUrl: '/assets/nfts/sage-nomad.webp',
+      quantity: 6,
+      priceEth: '1.39',
+      edition: '02/10',
+    },
+    {
+      nftId: 'nft_05',
+      title: 'Ivory Baron #088',
+      imageUrl: '/assets/nfts/ivory-baron.webp',
+      quantity: 9,
+      priceEth: '1.79',
+      edition: '05/10',
+    },
+  ],
+  subtotalEth: '26.83',
+  discountEth: '0.00',
+  gasFeeEth: '0.016',
+  totalEth: '26.846',
+  walletAddress: '0xA91F…E82C',
+  network: 'Ethereum',
+  transactionHash: '0xA91F…E82C',
+  idempotencyKey: 'idemp_order_demo',
+  createdAt: '2026-07-29T14:32:00.000Z',
+  confirmedAt: '2026-07-29T14:32:15.000Z',
+};
+
 function createInitialState(): DatabaseState {
   return {
     users: [...INITIAL_USERS],
     wallets: [...INITIAL_WALLETS],
     nfts: [...INITIAL_NFTS],
     favorites: {
-      user_1: ['nft_02'],
-      user_2: ['nft_01', 'nft_05'],
+      user_1: ['nft_01', 'nft_04'],
     },
     carts: {
       user_1: [
         {
           nftId: 'nft_01',
           nft: INITIAL_NFTS[0]!,
-          quantity: 1,
+          quantity: 2,
           priceEth: '1.19',
+        },
+        {
+          nftId: 'nft_02',
+          nft: INITIAL_NFTS[1]!,
+          quantity: 6,
+          priceEth: '1.39',
         },
       ],
       guest: [
@@ -370,7 +417,7 @@ function createInitialState(): DatabaseState {
         },
       ],
     },
-    orders: [],
+    orders: [INITIAL_ORDER_DEMO],
     coupons: [...INITIAL_COUPONS],
     idempotentOrders: {},
   };
