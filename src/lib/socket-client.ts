@@ -7,12 +7,24 @@ class RealtimeSocketClient {
   private processedEventIds = new Set<string>();
   private resourceVersions = new Map<string, number>();
 
-  public connect(url: string = import.meta.env.VITE_WS_URL || window.location.origin): Socket {
+  public connect(url?: string): Socket {
     if (this.socket && this.socket.connected) {
       return this.socket;
     }
 
-    this.socket = io(url, {
+    let targetUrl = url || import.meta.env.VITE_WS_URL;
+    if (typeof window !== 'undefined') {
+      const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      // Se estiver em produção (ex: Vercel) ou se VITE_WS_URL apontar para localhost fora de uma máquina local,
+      // conecte estritamente na mesma origem da página
+      if (!targetUrl || (!isLocalHost && targetUrl.includes('localhost'))) {
+        targetUrl = window.location.origin;
+      }
+    } else {
+      targetUrl = targetUrl || 'http://localhost:5173';
+    }
+
+    this.socket = io(targetUrl, {
       transports: ['websocket', 'polling'],
       autoConnect: true,
       reconnection: true,

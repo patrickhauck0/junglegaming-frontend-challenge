@@ -33,14 +33,12 @@ dist-ssr
 !.env.example
 .geminiignore
 
-# Playwright & Testing
+# Playwright & Testing (ignora apenas caches temporários, mantém relatórios e baselines versionados)
 test-results/
-playwright-report/
 blob-report/
 playwright/.cache/
+!playwright-report/
+!reports/
 playwright-screenshots/
-
-# Lighthouse reports
-lighthouse-reports/
 
 

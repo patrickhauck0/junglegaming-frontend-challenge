@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useCart, useUpdateCartItem, useRemoveCartItem } from '@/hooks/useCart';
 import { TrashIcon, ArrowLeftIcon } from '@/components/ui/icons';
+import { Button } from '@/components/ui';
 import { addEth, subtractEth, multiplyEthByQuantity, applyDiscountPercent } from '@/utils/eth-math';
 
 export const Route = createFileRoute('/cart')({
@@ -327,14 +328,14 @@ function CartPage() {
 
             {/* Checkout CTA */}
             <div className="flex flex-col gap-3 items-center w-full">
-              <button
+              <Button
                 type="button"
                 onClick={handleCheckout}
                 disabled={items.length === 0}
                 className="bg-primary h-10 w-full rounded-[3px] flex items-center justify-center font-mono font-bold text-[15px] text-ink hover:bg-[#E89B55] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Conectar e finalizar
-              </button>
+              </Button>
               <Link
                 to="/"
                 className="font-mono text-[15px] text-text-accent text-center hover:underline cursor-pointer"
@@ -545,14 +546,14 @@ function CartPage() {
           </div>
 
           {/* Checkout CTA */}
-          <button
+          <Button
             type="button"
             onClick={handleCheckout}
             disabled={items.length === 0}
             className="h-[60px] w-full rounded-[40px] flex items-center justify-center font-mono font-bold text-[16px] text-ink bg-gradient-to-r from-primary to-primary/80 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-95 transition-opacity"
           >
             Conectar e finalizar
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import {
   EyeHideIcon,
   EyeShowIcon,
 } from '@/components/ui/icons';
+import { Button, Input } from '@/components/ui';
 
 export const Route = createFileRoute('/register')({
   component: RegisterPage,
@@ -188,13 +189,13 @@ function RegisterPage() {
               data-node-id="70383:242"
               data-name="Username Input"
             >
-              <input
+              <Input
                 type="text"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Nome de usuário"
-                className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none"
+                className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none border-0 p-0 h-auto focus-visible:border-0 rounded-none"
                 aria-label="Nome de usuário"
               />
             </div>
@@ -205,13 +206,13 @@ function RegisterPage() {
               data-node-id="70383:243"
               data-name="Email Input"
             >
-              <input
+              <Input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Digite seu e-mail"
-                className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none"
+                className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none border-0 p-0 h-auto focus-visible:border-0 rounded-none"
                 aria-label="Digite seu e-mail"
               />
             </div>
@@ -282,7 +283,7 @@ function RegisterPage() {
               data-node-id="70383:246"
               data-name="CTA"
             >
-              <button
+              <Button
                 type="submit"
                 disabled={isRegistering}
                 className="h-[45px] w-full bg-[#D28A4C] hover:bg-[#E89B55] active:scale-[0.99] disabled:opacity-50 text-[#140D0A] font-mono font-bold text-[16px] leading-[16px] rounded-[5px] transition-all flex items-center justify-center cursor-pointer shadow-md"
@@ -290,7 +291,7 @@ function RegisterPage() {
                 data-name="Sign Up Button"
               >
                 {isRegistering ? 'Criando conta...' : 'Criar conta'}
-              </button>
+              </Button>
             </div>
           </form>
 
@@ -486,7 +487,7 @@ function RegisterPage() {
           )}
 
           {/* Botão Criar Perfil Mobile (h: 60px) */}
-          <button
+          <Button
             type="submit"
             disabled={isRegistering}
             className="h-[60px] w-full bg-[#D28A4C] hover:bg-[#E89B55] active:scale-[0.99] disabled:opacity-50 text-[#140D0A] font-mono font-bold text-[16px] leading-[16px] rounded-[10px] transition-all flex items-center justify-center cursor-pointer shadow-md mt-2"
@@ -494,7 +495,7 @@ function RegisterPage() {
             data-name="Create Profile Button"
           >
             {isRegistering ? 'Criando perfil...' : 'Criar perfil'}
-          </button>
+          </Button>
         </form>
 
         {/* Bloco de Login Social Mobile */}

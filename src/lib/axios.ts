@@ -1,7 +1,19 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 
+function getBaseUrl(): string {
+  const envUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_APP_URL;
+  if (typeof window !== 'undefined') {
+    const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    // Se estiver em produção (ex: Vercel) e a URL do env for localhost ou vazia, use caminhos relativos
+    if (!envUrl || (!isLocalHost && envUrl.includes('localhost'))) {
+      return '';
+    }
+  }
+  return envUrl || '';
+}
+
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '',
+  baseURL: getBaseUrl(),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',

@@ -9,6 +9,7 @@ import {
   RadioSelectedIcon,
   RadioUnselectedIcon,
 } from '@/components/ui/icons';
+import { Button, Input, Badge } from '@/components/ui';
 import { addEth, subtractEth, multiplyEthByQuantity } from '@/utils/eth-math';
 import { apiClient } from '@/lib/axios';
 
@@ -162,7 +163,7 @@ function PaymentPage() {
                       <span>Nome de exibição</span>
                       <span className="text-[#F0805F] ml-1 leading-none text-[18px]">*</span>
                     </label>
-                    <input
+                    <Input
                       id="display-name"
                       type="text"
                       value={displayName}
@@ -470,11 +471,9 @@ function PaymentPage() {
                     ) : (
                       <RadioUnselectedIcon className="size-4 shrink-0" />
                     )}
-                    <div className="bg-[#38220F] border border-[#55321F] rounded-[6px] px-2 py-1 flex items-center justify-center">
-                      <span className="text-[9px] font-bold text-text-accent tracking-wider whitespace-nowrap">
-                        METAMASK • WALLETCONNECT • COINBASE
-                      </span>
-                    </div>
+                    <Badge variant="accent" className="text-[9px] font-bold text-text-accent tracking-wider whitespace-nowrap">
+                      METAMASK • WALLETCONNECT • COINBASE
+                    </Badge>
                   </div>
                 </button>
 
@@ -519,14 +518,14 @@ function PaymentPage() {
                 </button>
 
                 {/* Confirm Button */}
-                <button
+                <Button
                   type="button"
                   onClick={() => handleConfirmOrder()}
                   disabled={isSubmitting}
                   className="bg-primary h-[45px] w-full rounded-[8px] flex items-center justify-center font-mono font-bold text-[15px] text-ink hover:bg-[#E89B55] transition-colors cursor-pointer disabled:opacity-50 mt-2"
                 >
                   {isSubmitting ? 'Processando compra...' : 'Confirmar compra'}
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -712,14 +711,14 @@ function PaymentPage() {
         </div>
 
         {/* Mobile Confirm Button */}
-        <button
+        <Button
           type="button"
           onClick={() => handleConfirmOrder()}
           disabled={isSubmitting}
           className="h-[60px] w-full rounded-[40px] flex items-center justify-center font-mono font-bold text-[15px] text-ink bg-gradient-to-r from-primary to-primary/80 cursor-pointer disabled:opacity-50 hover:opacity-95 transition-opacity"
         >
           {isSubmitting ? 'Processando compra...' : 'Confirmar compra'}
-        </button>
+        </Button>
       </div>
     </div>
   );

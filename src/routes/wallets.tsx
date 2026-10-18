@@ -15,6 +15,7 @@ import {
   RadioUnselectedIcon,
   HeartIcon,
 } from '@/components/ui/icons';
+import { Button } from '@/components/ui';
 
 export const Route = createFileRoute('/wallets')({
   component: WalletsPage,
@@ -668,7 +669,7 @@ function WalletsPage() {
 
             {/* Botão Salvar Carteira (131px x 40px) */}
             <div className="pt-2">
-              <button
+              <Button
                 type="submit"
                 disabled={isCreating}
                 className="h-[40px] w-full sm:w-[131px] rounded-[3px] bg-[#D28A4C] hover:bg-[#E89B55] active:scale-[0.99] disabled:opacity-50 font-mono font-bold text-[14px] leading-[16px] text-[#140D0A] flex items-center justify-center cursor-pointer shadow-sm transition-all text-center"
@@ -676,7 +677,7 @@ function WalletsPage() {
                 data-name="Save Wallet Button"
               >
                 {isCreating ? 'Salvando...' : 'Salvar carteira'}
-              </button>
+              </Button>
             </div>
           </form>
 

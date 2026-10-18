@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { CloseIcon } from '@/components/ui/icons';
+import { Button } from '@/components/ui';
 
 interface FilterOption {
   label: string;
@@ -210,13 +211,13 @@ export function FiltersSidebar({
           </div>
 
           {/* Botão Aplicar (Figma: w-auto px-[12px] py-[8px] bg-[#D28A4C] rounded-[6px]) */}
-          <button
+          <Button
             type="button"
             onClick={handleApplyPrice}
-            className="bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-bold text-[16px] leading-[20px] px-[12px] py-[8px] rounded-[6px] cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-foreground"
+            className="bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-bold text-[16px] leading-[20px] px-[12px] py-[8px] rounded-[6px] cursor-pointer transition-all focus-visible:ring-2 focus-visible:ring-foreground h-auto"
           >
             Aplicar
-          </button>
+          </Button>
         </div>
       </div>
 

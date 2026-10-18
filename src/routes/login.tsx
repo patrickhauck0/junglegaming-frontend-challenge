@@ -8,6 +8,7 @@ import {
   EyeHideIcon,
   EyeShowIcon,
 } from '@/components/ui/icons';
+import { Button, Input } from '@/components/ui';
 
 export const Route = createFileRoute('/login')({
   component: LoginPage,
@@ -148,13 +149,13 @@ function LoginPage() {
               data-node-id="70381:242"
               data-name="Email Input"
             >
-              <input
+              <Input
                 type="text"
                 required
                 value={emailOrUsername}
                 onChange={(e) => setEmailOrUsername(e.target.value)}
                 placeholder="contato@email.com"
-                className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none"
+                className="w-full bg-transparent font-mono text-[14px] text-[#F5F1EB] placeholder:text-[#B39463] outline-none border-0 p-0 h-auto focus-visible:border-0 rounded-none"
                 aria-label="E-mail ou nome de usuário"
               />
             </div>
@@ -216,7 +217,7 @@ function LoginPage() {
               data-node-id="70381:245"
               data-name="CTA"
             >
-              <button
+              <Button
                 type="submit"
                 disabled={isLoggingIn}
                 className="h-[45px] w-full bg-[#D28A4C] hover:bg-[#E89B55] active:scale-[0.99] disabled:opacity-50 text-[#140D0A] font-mono font-bold text-[16px] leading-[16px] rounded-[5px] transition-all flex items-center justify-center cursor-pointer shadow-md"
@@ -224,7 +225,7 @@ function LoginPage() {
                 data-name="Sign In Button"
               >
                 {isLoggingIn ? 'Entrando...' : 'Entrar'}
-              </button>
+              </Button>
             </div>
           </form>
 
@@ -401,7 +402,7 @@ function LoginPage() {
           )}
 
           {/* Botão Entrar Mobile (h: 60px) */}
-          <button
+          <Button
             type="submit"
             disabled={isLoggingIn}
             className="h-[60px] w-full bg-[#D28A4C] hover:bg-[#E89B55] active:scale-[0.99] disabled:opacity-50 text-[#140D0A] font-mono font-bold text-[16px] leading-[16px] rounded-[10px] transition-all flex items-center justify-center cursor-pointer shadow-md mt-2"
@@ -409,7 +410,7 @@ function LoginPage() {
             data-name="Sign In Button"
           >
             {isLoggingIn ? 'Entrando...' : 'Entrar'}
-          </button>
+          </Button>
         </form>
 
         {/* Bloco de Login Social Mobile */}
