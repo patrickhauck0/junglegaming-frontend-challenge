@@ -28,6 +28,7 @@ export default defineConfig({
       name: 'Tablet Chromium',
       use: {
         ...devices['iPad (gen 7)'],
+        browserName: 'chromium',
         viewport: { width: 768, height: 1024 },
       },
     },
@@ -35,6 +36,7 @@ export default defineConfig({
       name: 'Mobile Chromium',
       use: {
         ...devices['iPhone 14'],
+        browserName: 'chromium',
         viewport: { width: 390, height: 844 },
       },
     },

@@ -1,75 +1,149 @@
-import { Link } from '@tanstack/react-router';
-import { KurioLogo, SearchIcon, CartIcon } from '@/components/ui/icons';
+import { useState, useRef, useEffect, type FormEvent } from 'react';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { KurioLogo, SearchIcon, CartIcon, LogoutIcon, CloseIcon } from '@/components/ui/icons';
 
 interface HeaderProps {
   cartItemCount?: number;
-  activeItem?: 'home' | 'market' | 'collections' | 'about';
+  activeItem?: 'home' | 'market' | 'creators' | 'learn';
 }
 
 export function Header({ cartItemCount = 0, activeItem = 'home' }: HeaderProps) {
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (searchOpen) {
+      searchInputRef.current?.focus();
+    }
+  }, [searchOpen]);
+
+  const handleSearchSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate({
+        to: '/',
+        search: (prev: Record<string, unknown>) => ({ ...prev, search: query.trim(), page: 1 }),
+      });
+      setSearchOpen(false);
+    }
+  };
+
   return (
-    <header className="w-full bg-ink/95 backdrop-blur-sm border-b border-border/80 sticky top-0 z-40">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[120px] h-[72px] flex items-center justify-between gap-4">
-        {/* Marca KURIO */}
-        <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center focus-visible:ring-2 focus-visible:ring-primary rounded p-1">
-            <KurioLogo className="h-6 w-auto" />
+    <header className="w-full bg-ink border-b border-border sticky top-0 z-40">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-[120px] h-[72px] flex items-center justify-between relative">
+        {/* Marca KURIO (Figma Node I70522:3240;70504:3015;70486:509) */}
+        <div className="flex items-center gap-[40px] lg:gap-[60px]">
+          <Link
+            to="/"
+            className="flex items-center focus-visible:ring-2 focus-visible:ring-primary rounded p-1"
+            aria-label="Página inicial Kurio"
+          >
+            <KurioLogo className="h-[20px] w-auto" />
           </Link>
 
-          {/* Navegação Desktop */}
-          <nav className="hidden md:flex items-center gap-6" aria-label="Navegação principal">
+          {/* Navegação Desktop (Figma Node I70522:3240;70504:3015;70486:511) */}
+          <nav className="hidden md:flex items-center gap-[40px]" aria-label="Navegação principal">
+            {/* Início com Active Underline */}
+            <div className="flex flex-col items-center relative py-1">
+              <Link
+                to="/"
+                className={`font-mono text-[16px] leading-normal transition-colors ${
+                  activeItem === 'home'
+                    ? 'font-bold text-text-accent'
+                    : 'font-normal text-foreground hover:text-text-accent'
+                }`}
+              >
+                Início
+              </Link>
+              {activeItem === 'home' && (
+                <div className="absolute -bottom-2 w-[58px] h-[2px] bg-text-accent rounded-full" />
+              )}
+            </div>
+
             <Link
               to="/"
-              className={`text-sm tracking-wide transition-colors ${
-                activeItem === 'home' ? 'text-primary font-bold' : 'text-text-secondary hover:text-foreground'
+              search={{ tab: 'all' }}
+              className={`font-mono text-[16px] leading-normal transition-colors ${
+                activeItem === 'market'
+                  ? 'font-bold text-text-accent'
+                  : 'font-normal text-foreground hover:text-text-accent'
               }`}
             >
-              Explorar
+              Mercado
             </Link>
-            <span className="text-sm tracking-wide text-text-secondary/60 cursor-not-allowed">
-              Coleções
+
+            <span className="font-mono text-[16px] leading-normal text-foreground/70 cursor-not-allowed select-none">
+              Criadores
             </span>
-            <span className="text-sm tracking-wide text-text-secondary/60 cursor-not-allowed">
-              Artistas
-            </span>
-            <span className="text-sm tracking-wide text-text-secondary/60 cursor-not-allowed">
-              Sobre
+
+            <span className="font-mono text-[16px] leading-normal text-foreground/70 cursor-not-allowed select-none">
+              Aprenda
             </span>
           </nav>
         </div>
 
-        {/* Busca e Ações */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          <div className="relative hidden sm:block w-48 lg:w-64">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-text-secondary" />
-            <input
-              type="text"
-              placeholder="Buscar NFTs..."
-              className="w-full bg-surface-card border border-border rounded-lg pl-9 pr-3 py-1.5 text-xs text-foreground placeholder:text-text-secondary/60 focus-visible:border-primary focus-visible:ring-1 focus-visible:ring-primary"
-              aria-label="Buscar coleções e NFTs"
-            />
+        {/* Busca Expansível & Ações à Direita (Figma Node I70522:3240;70504:3015;70486:518) */}
+        <div className="flex items-center gap-[28px]">
+          {/* Lupa / Busca Interativa */}
+          <div className="relative flex items-center">
+            {searchOpen ? (
+              <form
+                onSubmit={handleSearchSubmit}
+                className="absolute right-0 flex items-center bg-surface-card border border-primary/60 rounded-[6px] px-3 py-1.5 shadow-xl w-[240px] sm:w-[280px] z-50 animate-in fade-in zoom-in-95 duration-150"
+              >
+                <SearchIcon className="size-4 text-text-accent mr-2 shrink-0" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Buscar NFTs..."
+                  className="bg-transparent font-mono text-[14px] text-foreground placeholder:text-text-secondary focus-visible:outline-none w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(false)}
+                  className="p-1 text-text-secondary hover:text-foreground"
+                  aria-label="Fechar busca"
+                >
+                  <CloseIcon className="size-4" />
+                </button>
+              </form>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="size-[20px] flex items-center justify-center text-foreground hover:text-text-accent transition-colors focus-visible:ring-2 focus-visible:ring-primary rounded cursor-pointer"
+                aria-label="Abrir campo de busca de NFTs"
+              >
+                <SearchIcon className="size-[20px]" />
+              </button>
+            )}
           </div>
 
-          {/* Botão do Carrinho */}
+          {/* Carrinho de Compras com Badge (Figma: Cart Icon w:24, Badge size:16 text:10) */}
           <Link
             to="/cart"
-            className="relative p-2 rounded-lg bg-surface-card border border-border text-foreground hover:border-border-soft transition-colors focus-visible:ring-2 focus-visible:ring-primary"
+            className="relative size-[24px] flex items-center justify-center text-foreground hover:text-text-accent transition-colors focus-visible:ring-2 focus-visible:ring-primary rounded"
             aria-label={`Carrinho de compras com ${cartItemCount} itens`}
           >
-            <CartIcon className="size-5" />
+            <CartIcon className="size-[24px]" />
             {cartItemCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-primary text-ink text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center">
+              <span className="absolute -top-1 -right-2 size-[16px] rounded-full bg-primary text-ink font-mono font-medium text-[10px] flex items-center justify-center shadow-sm">
                 {cartItemCount}
               </span>
             )}
           </Link>
 
-          {/* Botão Entrar / Perfil */}
+          {/* Botão Entrar (Figma: w-[100px] h-[35px] rounded-[6px] bg-[#D28A4C]) */}
           <Link
             to="/login"
-            className="bg-primary hover:bg-primary-hover text-ink font-bold text-xs px-4 py-2 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-foreground"
+            className="w-[100px] h-[35px] bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-medium text-[16px] rounded-[6px] flex items-center justify-center gap-[4px] transition-all shadow-sm focus-visible:ring-2 focus-visible:ring-foreground"
           >
-            Entrar
+            <LogoutIcon className="size-[20px]" />
+            <span>Entrar</span>
           </Link>
         </div>
       </div>
