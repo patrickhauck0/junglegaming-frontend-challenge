@@ -375,19 +375,19 @@ function NftDetailsPage() {
                 <button
                   type="button"
                   onClick={handleDecreaseQuantity}
-                  disabled={quantity <= 1}
+                  disabled={quantity <= 1 || maxAvailable <= 0}
                   className="size-[28px] rounded-[18px] bg-primary border border-ink flex items-center justify-center text-ink disabled:opacity-40 cursor-pointer"
                   aria-label="Diminuir quantidade"
                 >
                   <MinusIcon className="size-3 text-ink" />
                 </button>
                 <span className="font-mono text-[18px] font-medium text-foreground w-6 text-center">
-                  {quantity}
+                  {maxAvailable <= 0 ? 0 : quantity}
                 </span>
                 <button
                   type="button"
                   onClick={handleIncreaseQuantity}
-                  disabled={quantity >= maxAvailable}
+                  disabled={quantity >= maxAvailable || maxAvailable <= 0}
                   className="size-[28px] rounded-[18px] bg-primary border border-ink flex items-center justify-center text-ink disabled:opacity-40 cursor-pointer"
                   aria-label="Aumentar quantidade"
                 >
@@ -405,9 +405,10 @@ function NftDetailsPage() {
             <Button
               type="button"
               onClick={handleAddToCart}
-              className="flex-1 h-[56px] rounded-[40px] bg-gradient-to-r from-primary to-primary/80 hover:brightness-110 active:scale-95 text-ink font-mono font-bold text-[16px] flex items-center justify-center shadow-lg transition-all cursor-pointer"
+              disabled={maxAvailable <= 0}
+              className="flex-1 h-[56px] rounded-[40px] bg-gradient-to-r from-primary to-primary/80 hover:brightness-110 active:scale-95 text-ink font-mono font-bold text-[16px] flex items-center justify-center shadow-lg transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Comprar NFT
+              {maxAvailable <= 0 ? 'ESGOTADO' : 'Comprar NFT'}
             </Button>
 
             <Link
@@ -587,7 +588,7 @@ function NftDetailsPage() {
                   <button
                     type="button"
                     onClick={handleDecreaseQuantity}
-                    disabled={quantity <= 1}
+                    disabled={quantity <= 1 || maxAvailable <= 0}
                     className="w-[33px] h-[49px] rounded-[33px] bg-primary border border-ink flex items-center justify-center text-ink disabled:opacity-40 cursor-pointer shadow-md hover:brightness-110 active:scale-95 transition-all"
                     aria-label="Diminuir quantidade"
                   >
@@ -595,13 +596,13 @@ function NftDetailsPage() {
                   </button>
 
                   <span className="font-mono text-[20px] font-normal leading-[28px] text-foreground px-2">
-                    {quantity}
+                    {maxAvailable <= 0 ? 0 : quantity}
                   </span>
 
                   <button
                     type="button"
                     onClick={handleIncreaseQuantity}
-                    disabled={quantity >= maxAvailable}
+                    disabled={quantity >= maxAvailable || maxAvailable <= 0}
                     className="w-[33px] h-[49px] rounded-[33px] bg-primary border border-ink flex items-center justify-center text-ink disabled:opacity-40 cursor-pointer shadow-md hover:brightness-110 active:scale-95 transition-all"
                     aria-label="Aumentar quantidade"
                   >
@@ -614,9 +615,10 @@ function NftDetailsPage() {
                   <Button
                     type="button"
                     onClick={handleAddToCart}
-                    className="w-[130px] h-[40px] rounded-[6px] bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-bold text-[14px] leading-[20px] flex items-center justify-center transition-all shadow-md cursor-pointer"
+                    disabled={maxAvailable <= 0}
+                    className="w-[130px] h-[40px] rounded-[6px] bg-primary hover:brightness-110 active:scale-95 text-ink font-mono font-bold text-[14px] leading-[20px] flex items-center justify-center transition-all shadow-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    COMPRAR
+                    {maxAvailable <= 0 ? 'ESGOTADO' : 'COMPRAR'}
                   </Button>
 
                   <Button
